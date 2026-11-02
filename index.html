@@ -40,6 +40,7 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 body{background:var(--velvet);background-image:radial-gradient(ellipse 90% 50% at 50% 0%,var(--era-glow),transparent 70%),radial-gradient(ellipse 120% 60% at 50% 0%,var(--panel-2),var(--velvet) 70%);background-attachment:fixed;color:var(--ink);font:16px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--velvet)}
 .wrap{max-width:1180px;margin:0 auto}
+main.wrap{padding-bottom:56px}
 h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
 a{color:var(--gold)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
@@ -297,27 +298,6 @@ dd{margin:0}
     <div class="quiz" id="quizBox"></div>
   </section>
 
-  <details class="curator">
-    <summary>Куратору: как добавить фото и видео</summary>
-    <p>Все экспонаты описаны в одном списке <code>AWARDS</code> внутри страницы. У каждого есть поле <code>photo</code> (главное фото вместо схемы) и список <code>media</code>:</p>
-<pre>{ id: "lenin", name: "Орден Ленина", …,
-  look: "Как выглядит…", people: "Известные кавалеры…", history: "История…",
-  photo: "lenin.jpg",
-  media: [
-    { type: "image", src: "lenin-back.jpg", caption: "Оборотная сторона" },
-    { type: "video", src: "lenin.mp4", caption: "Рассказ экскурсовода" },
-    { type: "link",  src: "https://youtube.com/…", caption: "Кинохроника 1945 года" }
-  ] }</pre>
-    <ul>
-      <li><b>image</b> и <b>video</b> — файлы, лежащие рядом со страницей.</li>
-      <li><b>link</b> — ссылка на внешний ролик или статью, открывается в новой вкладке.</li>
-      <li>Чтобы добавить новый экспонат, скопируйте любую запись и поменяйте поля. В зал и хронологию он попадёт сам.</li>
-    </ul>
-  </details>
-
-  <footer>
-    Фотографии наград — из материалов музея. Числа награждений округлены, даты для современных наград указаны по статутам на момент учреждения. Чтобы заменить фото, впишите новый путь в поле <code>photo</code>.
-  </footer>
 </main>
 
 <dialog id="dlg" aria-labelledby="dTitle">
@@ -1331,7 +1311,6 @@ const dlg=document.getElementById("dlg"), dContent=document.getElementById("dCon
 const ICON_IMG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 17-5-5-9 8"/></svg>`;
 const ICON_VID=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>`;
 function mediaHTML(a){
-  if(!a.media||!a.media.length) return `<div class="mgrid"><div class="slot">${ICON_IMG}Место для фото экспоната</div><div class="slot">${ICON_VID}Место для видео или кинохроники</div></div>`;
   return `<div class="mgrid">${a.media.map(m=>{
     const cap=m.caption?`<figcaption>${m.caption}</figcaption>`:"";
     if(m.type==="image") return `<figure${m.model?' class="model"':""}><img src="${m.src}" alt="${m.caption||a.name}" loading="lazy">${cap}</figure>`;
@@ -1366,7 +1345,7 @@ function openAward(id){
       ${a.people?`<section><h3>Кавалеры</h3><p>${a.people}</p></section>`:""}
       ${a.history?`<section><h3>История</h3><p>${a.history}</p></section>`:""}
     </div>
-    <div class="media"><h3>${a.inMuseum?"Экспонат музея и медиатека":"Медиатека"}</h3>${mediaHTML(a)}</div>
+    ${a.media&&a.media.length?`<div class="media"><h3>${a.inMuseum?"Экспонат музея и медиатека":"Медиатека"}</h3>${mediaHTML(a)}</div>`:""}
     <div class="d-nav">
       <button class="btn ghost" type="button" data-open="${prev.id}">← ${prev.name.length>26?"Назад":prev.name}</button>
       <button class="btn ghost" type="button" data-open="${next.id}">${next.name.length>26?"Дальше":next.name} →</button>
