@@ -134,6 +134,10 @@ a{color:var(--gold)}
   border:1px solid var(--line);border-radius:8px;padding:7px 10px;display:flex;gap:10px;align-items:center}
 .ladder button:hover{border-color:var(--gold)}
 .ladder .st{font:12px var(--mono);color:var(--gold);min-width:1.6em}
+.card .inmus{position:absolute;top:10px;left:10px;z-index:1;font:700 11px var(--body);letter-spacing:.04em;color:#fff;background:var(--enamel);border-radius:999px;padding:3px 8px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.mgrid figure.model{grid-column:1/-1;background:var(--panel-2);border:1px solid var(--gold-dim);border-radius:14px;padding:10px}
+.mgrid figure.model img{max-height:420px;width:auto;margin:0 auto;object-fit:contain}
+.mgrid figure.model figcaption{color:var(--gold);text-align:center;margin-top:8px}
 .empty{color:var(--muted);padding:24px 0}
 
 /* хронология */
@@ -620,7 +624,7 @@ const AWARDS = [
     history:"Учреждён в один день с орденом Ленина — 6 апреля 1930 года.",
     fact:"Его носят на правой стороне груди. В центре — красноармеец в шинели с винтовкой.",
     q:"Красная пятиконечная звезда с красноармейцем в центре",
-    shape:"star", metal:"silver", enamel:"#c8202a", photo:"red-star.jpg", photoBg:"#f8f9fb", media:[] },
+    shape:"star", metal:"silver", enamel:"#c8202a", photo:"red-star.jpg", photoBg:"#f8f9fb", inMuseum:true, media:[ { type:"image", src:"model-red-star.jpg", caption:"Экспонат нашего музея — модель, напечатанная на 3D-принтере", model:true } ] },
   { id:"victory", hall:"war", name:"Орден «Победа»", sub:"Высший военный орден",
     year:1943, est:"8 ноября 1943", material:"Платина, золото, серебро, рубины, 174 бриллианта",
     statute:"Высшему командованию за успешные операции, коренным образом изменившие обстановку в пользу Красной армии", count:"20 награждений, 17 кавалеров",
@@ -638,7 +642,7 @@ const AWARDS = [
     history:"Учреждён одновременно с орденом «Победа». Цвета ленты унаследованы от солдатского Георгиевского креста.",
     fact:"Вручали строго по порядку: сначала III степень, затем II и I. Полные кавалеры по правам приравнены к Героям Советского Союза.",
     q:"Солдатский орден трёх степеней на оранжево-чёрной ленте",
-    shape:"star", metal:"silver", enamel:"#c8202a", center:true, ribbon:R.george, photo:"glory.jpg", media:[ { type:"image", src:"glory-all.jpg", caption:"Орден трёх степеней на ленте" } ] },
+    shape:"star", metal:"silver", enamel:"#c8202a", center:true, ribbon:R.george, photo:"glory.jpg", inMuseum:true, media:[ { type:"image", src:"model-glory.jpg", caption:"Экспонат нашего музея — модель, напечатанная на 3D-принтере", model:true }, { type:"image", src:"glory-all.jpg", caption:"Орден трёх степеней на ленте" } ] },
   { id:"patriotic", hall:"war", name:"Орден Отечественной войны", sub:"Первый орден Великой Отечественной",
     year:1942, est:"20 мая 1942", material:"I ст. — золото и серебро, II ст. — серебро",
     statute:"За подвиги в боях — статут перечислял конкретные действия, например уничтожение танков или самолётов", count:"≈ 9,1 млн, вкл. юбилейное награждение 1985 г.",
@@ -647,7 +651,7 @@ const AWARDS = [
     history:"Первый орден, созданный во время войны. Статут впервые перечислял конкретные подвиги: например, I степень полагалась тому, кто лично уничтожил 2 тяжёлых или средних либо 3 лёгких танка противника, II степень — за 1 тяжёлый или средний либо 2 лёгких танка.",
     fact:"Единственный советский орден, который после смерти кавалера оставался его семье. В 1985 году к 40-летию Победы им наградили всех ветеранов войны.",
     q:"Единственный орден, который после смерти кавалера оставался семье",
-    shape:"rays", metal:"gold", enamel:"#c8202a", rays:12, photo:"patriotic.jpg", media:[ { type:"image", src:"patriotic-all.jpg", caption:"Орден I и II степени" } ] },
+    shape:"rays", metal:"gold", enamel:"#c8202a", rays:12, photo:"patriotic.jpg", inMuseum:true, media:[ { type:"image", src:"model-patriotic.jpg", caption:"Экспонат нашего музея — модель, напечатанная на 3D-принтере", model:true }, { type:"image", src:"patriotic-all.jpg", caption:"Орден I и II степени" } ] },
   { id:"suvorov", hall:"war", name:"Орден Суворова", sub:"Полководческий орден",
     year:1942, est:"29 июля 1942", material:"I ст. — платина, II ст. — золото, III ст. — серебро",
     statute:"За выдающиеся успехи в управлении войсками и отличную организацию боевых операций", count:"7 267",
@@ -656,7 +660,7 @@ const AWARDS = [
     history:"Учреждён вместе с орденами Кутузова и Александра Невского 29 июля 1942 года. Главное условие статута — победа меньшими силами над численно превосходящим противником, по суворовскому правилу «Врага бьют не числом, а умением».",
     fact:"Орден Суворова I степени № 1 получил Георгий Жуков.",
     q:"Полководческий орден, знак № 1 первой степени которого — у Жукова",
-    shape:"rays", metal:"platinum", enamel:"#c8202a", rays:20, photo:"suvorov.jpg", media:[ { type:"image", src:"suvorov-all.jpg", caption:"Три степени ордена" } ] },
+    shape:"rays", metal:"platinum", enamel:"#c8202a", rays:20, photo:"suvorov.jpg", inMuseum:true, media:[ { type:"image", src:"model-suvorov.jpg", caption:"Экспонат нашего музея — модель, напечатанная на 3D-принтере", model:true }, { type:"image", src:"suvorov-all.jpg", caption:"Три степени ордена" } ] },
   { id:"kutuzov", hall:"war", name:"Орден Кутузова", sub:"Полководческий орден",
     year:1942, est:"29 июля 1942 (I и II ст.), 8 февраля 1943 (III ст.)", material:"I ст. — золото, II и III ст. — серебро",
     statute:"За хорошо разработанный и проведённый план операции", count:"7 329",
@@ -665,7 +669,7 @@ const AWARDS = [
     history:"III степень добавили в феврале 1943 года, чтобы орденом можно было награждать командиров более низкого ранга.",
     fact:"Статут отмечал и умело организованный отход крупных сил с наименьшими потерями — в духе тактики самого Кутузова.",
     q:"Могла отметить даже грамотно организованный отход войск",
-    shape:"rays", metal:"silver", enamel:"#e9edf0", rays:8, photo:"kutuzov.jpg", media:[ { type:"image", src:"kutuzov-all.jpg", caption:"Три степени ордена" } ] },
+    shape:"rays", metal:"silver", enamel:"#e9edf0", rays:8, photo:"kutuzov.jpg", inMuseum:true, media:[ { type:"image", src:"model-kutuzov.jpg", caption:"Экспонат нашего музея — модель, напечатанная на 3D-принтере", model:true }, { type:"image", src:"kutuzov-all.jpg", caption:"Три степени ордена" } ] },
   { id:"nevsky", hall:"war", name:"Орден Александра Невского", sub:"Для командиров от взвода до дивизии",
     year:1942, est:"29 июля 1942", material:"Серебро, позолота, эмаль",
     statute:"За инициативу и умелые действия, принёсшие победу с малыми потерями", count:"42 165",
@@ -692,7 +696,7 @@ const AWARDS = [
     history:"Первый орден войны, созданный специально для флота (в один день с орденом Нахимова — 3 марта 1944 года). До этого моряков награждали довоенными орденами.",
     fact:"Вместе с орденом Нахимова — главная полководческая награда флота.",
     q:"Высшая флотоводческая награда",
-    shape:"disc", metal:"platinum", enamel:"#2b5fb0", mark:"⚓", markColor:"#e9edf0", photo:"ushakov.jpg", media:[ { type:"image", src:"ushakov-all.jpg", caption:"Орден I и II степени" } ] },
+    shape:"disc", metal:"platinum", enamel:"#2b5fb0", mark:"⚓", markColor:"#e9edf0", photo:"ushakov.jpg", inMuseum:true, media:[ { type:"image", src:"model-ushakov.jpg", caption:"Экспонат нашего музея — модель, напечатанная на 3D-принтере", model:true }, { type:"image", src:"ushakov-all.jpg", caption:"Орден I и II степени" } ] },
   { id:"nakhimov", hall:"war", name:"Орден Нахимова", sub:"Флотоводческий орден",
     year:1944, est:"3 марта 1944", material:"I ст. — золото, II ст. — серебро",
     statute:"Морским офицерам за умелую разработку и проведение операций и отражение наступления противника", count:"551",
@@ -701,7 +705,7 @@ const AWARDS = [
     history:"Учреждён вместе с орденом Ушакова. В тот же день появились и медали Ушакова и Нахимова для матросов.",
     fact:"В отличие от «наступательного» ордена Ушакова, это оборонительная награда: за отражение атаки врага с сохранением своих основных сил.",
     q:"Морской орден с якорями между лучами звезды",
-    shape:"rays", metal:"gold", enamel:"#2b5fb0", rays:10, photo:"nakhimov.jpg", media:[ { type:"image", src:"nakhimov-all.jpg", caption:"Орден I и II степени" } ] },
+    shape:"rays", metal:"gold", enamel:"#2b5fb0", rays:10, photo:"nakhimov.jpg", inMuseum:true, media:[ { type:"image", src:"model-nakhimov.jpg", caption:"Экспонат нашего музея — модель, напечатанная на 3D-принтере", model:true }, { type:"image", src:"nakhimov-all.jpg", caption:"Орден I и II степени" } ] },
   { id:"service", hall:"war", name:"Орден «За службу Родине в Вооружённых Силах СССР»", sub:"Армия мирного времени",
     year:1974, est:"28 октября 1974", material:"Серебро, позолота, эмаль",
     statute:"За успехи в боевой подготовке и поддержание высокой боевой готовности", count:"—",
@@ -1267,7 +1271,7 @@ document.getElementById("q").addEventListener("input",e=>{query=e.target.value.t
 
 function cardHTML(a){
   return `<button class="card" type="button" data-open="${a.id}" data-id="${a.id}">
-    <span class="seen" ${seen.has(a.id)?"":"hidden"}>осмотрено</span>
+    <span class="seen" ${seen.has(a.id)?"":"hidden"}>осмотрено</span>${a.inMuseum?`<span class="inmus">Есть в музее</span>`:""}
     <span class="stand${a.photo?" ph":""}"${a.photoBg?` style="--pbg:${a.photoBg}"`:""}>${a.photo?`<img src="${a.photo}" alt="${a.name}" loading="lazy">`:emblem(a)}</span>
     <span class="cap"><span class="yr">${a.year}</span><span class="nm">${a.name}</span></span>
   </button>`;
@@ -1301,7 +1305,7 @@ function mediaHTML(a){
   if(!a.media||!a.media.length) return `<div class="mgrid"><div class="slot">${ICON_IMG}Место для фото экспоната</div><div class="slot">${ICON_VID}Место для видео или кинохроники</div></div>`;
   return `<div class="mgrid">${a.media.map(m=>{
     const cap=m.caption?`<figcaption>${m.caption}</figcaption>`:"";
-    if(m.type==="image") return `<figure><img src="${m.src}" alt="${m.caption||a.name}" loading="lazy">${cap}</figure>`;
+    if(m.type==="image") return `<figure${m.model?' class="model"':""}><img src="${m.src}" alt="${m.caption||a.name}" loading="lazy">${cap}</figure>`;
     if(m.type==="video") return `<figure><video src="${m.src}" controls preload="metadata" playsinline></video>${cap}</figure>`;
     return `<a class="mlink" href="${m.src}" target="_blank" rel="noopener">${ICON_VID}<span>${m.caption||m.src}</span></a>`;
   }).join("")}</div>`;
@@ -1333,7 +1337,7 @@ function openAward(id){
       ${a.people?`<section><h3>Кавалеры</h3><p>${a.people}</p></section>`:""}
       ${a.history?`<section><h3>История</h3><p>${a.history}</p></section>`:""}
     </div>
-    <div class="media"><h3>Медиатека</h3>${mediaHTML(a)}</div>
+    <div class="media"><h3>${a.inMuseum?"Экспонат музея и медиатека":"Медиатека"}</h3>${mediaHTML(a)}</div>
     <div class="d-nav">
       <button class="btn ghost" type="button" data-open="${prev.id}">← ${prev.name.length>26?"Назад":prev.name}</button>
       <button class="btn ghost" type="button" data-open="${next.id}">${next.name.length>26?"Дальше":next.name} →</button>
