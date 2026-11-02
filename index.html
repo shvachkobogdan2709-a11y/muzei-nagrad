@@ -204,6 +204,25 @@ dd{margin:0}
 .mgrid figcaption{font-size:13px;color:var(--muted);margin-top:4px}
 .mlink{display:flex;align-items:center;gap:10px;padding:14px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:var(--ink)}
 .d-nav{display:flex;justify-content:space-between;gap:8px;padding:14px 28px 22px;border-top:1px solid var(--line)}
+/* просмотр фото */
+.d-emb img,.mgrid figure img{cursor:zoom-in}
+.zoom-hint{display:block;text-align:center;color:var(--muted);font-size:12px;margin-top:6px}
+.lb{width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;border-radius:0;background:rgba(6,3,5,.96);color:#f1e6d5;overflow:hidden}
+.lb[open]{display:flex;flex-direction:column}
+.lb::backdrop{background:rgba(0,0,0,.9)}
+.lb-stage{flex:1;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;
+  padding:max(56px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 8px max(12px,env(safe-area-inset-left,0px));touch-action:none}
+.lb-stage img{max-width:100%;max-height:100%;object-fit:contain;cursor:zoom-in;user-select:none;-webkit-user-drag:none;
+  transition:transform .25s ease;transform-origin:0 0;will-change:transform}
+.lb-stage.zoomed img{cursor:grab;transition:none}
+.lb-stage.dragging img{cursor:grabbing}
+.lb-bar{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.lb-cap{flex:1;min-width:0;text-align:center;font-size:15px}
+.lb-cap small{display:block;color:#b5a18f;font-size:12px;margin-top:2px}
+.lb-btn{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid rgba(216,172,86,.4);background:rgba(45,24,34,.9);color:#f1e6d5;font-size:20px;cursor:pointer}
+.lb-btn:hover{border-color:#d8ac56}
+.lb-btn[hidden]{display:none}
+.lb-x{position:absolute;top:max(10px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px))}
 .x{position:sticky;top:10px;float:right;margin:10px 10px 0 0;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);font-size:20px;cursor:pointer;z-index:2}
 
 @media (max-width:760px){
@@ -304,6 +323,16 @@ dd{margin:0}
 <dialog id="dlg" aria-labelledby="dTitle">
   <button class="x" id="dClose" type="button" aria-label="Закрыть">×</button>
   <div id="dContent"></div>
+</dialog>
+
+<dialog id="lb" class="lb" aria-label="Просмотр фото">
+  <div class="lb-stage" id="lbStage"><img id="lbImg" alt=""></div>
+  <div class="lb-bar">
+    <button class="lb-btn" id="lbPrev" type="button" aria-label="Предыдущее фото">←</button>
+    <div class="lb-cap"><span id="lbCap"></span><small id="lbHint">Нажмите на фото, чтобы приблизить</small></div>
+    <button class="lb-btn" id="lbNext" type="button" aria-label="Следующее фото">→</button>
+  </div>
+  <button class="lb-btn lb-x" id="lbClose" type="button" aria-label="Закрыть">×</button>
 </dialog>
 
 <script>
@@ -1318,7 +1347,7 @@ function openAward(id){
   if(eraOf(a)!==era) setEra(eraOf(a));
   dContent.innerHTML=`
     <div class="d-top">
-      <div class="d-emb${a.photo?" ph":""}"${a.photoBg?` style="--pbg:${a.photoBg}"`:""}>${a.photo?`<img src="${a.photo}" alt="${a.name}">`:emblem(a)}</div>
+      <div><div class="d-emb${a.photo?" ph":""}"${a.photoBg?` style="--pbg:${a.photoBg}"`:""}>${a.photo?`<img src="${a.photo}" alt="${a.name}">`:emblem(a)}</div>${a.photo?`<span class="zoom-hint">Нажмите на фото, чтобы увеличить</span>`:""}</div>
       <div class="d-body">
         <span class="eyebrow">${ERAS.find(e=>e.id===hall.era).name} · ${hall.name}</span>
         <h2 id="dTitle">${a.name}</h2>
@@ -1356,6 +1385,57 @@ document.getElementById("randomBtn").addEventListener("click",()=>{
   const pool=AWARDS.filter(a=>!seen.has(a.id)); const src=pool.length?pool:AWARDS;
   openAward(src[Math.floor(Math.random()*src.length)].id);
 });
+/* ===== ПРОСМОТР ФОТО ===== */
+const lb=document.getElementById("lb"), lbStage=document.getElementById("lbStage"), lbImg=document.getElementById("lbImg");
+const lbCap=document.getElementById("lbCap"), lbPrev=document.getElementById("lbPrev"), lbNext=document.getElementById("lbNext");
+let lbList=[], lbI=0, Z={s:1,x:0,y:0}, base={w:0,h:0,l:0,t:0};
+function lbApply(){ lbImg.style.transform=`translate(${Z.x}px,${Z.y}px) scale(${Z.s})`; lbStage.classList.toggle("zoomed",Z.s>1);
+  document.getElementById("lbHint").textContent=Z.s>1?"Двигайте фото, нажмите ещё раз, чтобы уменьшить":"Нажмите на фото, чтобы приблизить"; }
+function lbReset(){ Z={s:1,x:0,y:0}; lbApply(); }
+function lbClamp(){ const r=lbStage.getBoundingClientRect(), w=base.w*Z.s, h=base.h*Z.s;
+  const minX=Math.min(0,r.width-w)-base.l, maxX=Math.max(0,r.width-w)-base.l; // keep image covering view
+  Z.x=Math.min(Math.max(Z.x,minX- (w<r.width?0:0)),maxX); 
+  const minY=Math.min(0,r.height-h)-base.t, maxY=Math.max(0,r.height-h)-base.t;
+  Z.y=Math.min(Math.max(Z.y,minY),maxY);
+  if(w<r.width) Z.x=(r.width-w)/2-base.l; if(h<r.height) Z.y=(r.height-h)/2-base.t; }
+function lbMeasure(){ const r=lbStage.getBoundingClientRect(), i=lbImg.getBoundingClientRect(); base={w:i.width/Z.s,h:i.height/Z.s,l:i.left-r.left-Z.x,t:i.top-r.top-Z.y}; }
+function lbZoomAt(cx,cy,s){ const r=lbStage.getBoundingClientRect(); lbMeasure();
+  const px=(cx-r.left-base.l-Z.x)/Z.s, py=(cy-r.top-base.t-Z.y)/Z.s;
+  Z.s=s; Z.x=cx-r.left-base.l-px*s; Z.y=cy-r.top-base.t-py*s; lbClamp(); lbApply(); }
+function lbShow(i){ lbI=(i+lbList.length)%lbList.length; const it=lbList[lbI]; lbReset();
+  lbImg.src=it.src; lbImg.alt=it.cap; lbCap.textContent=it.cap; lbPrev.hidden=lbNext.hidden=lbList.length<2; }
+function lbOpen(img){
+  const imgs=[...dContent.querySelectorAll(".d-emb img,.mgrid figure img")];
+  lbList=imgs.map(x=>({src:x.currentSrc||x.src,cap:(x.closest("figure")?.querySelector("figcaption")?.textContent)||x.alt||""}));
+  try{ lb.showModal(); }catch(e){ lb.setAttribute("open",""); }
+  lbShow(Math.max(0,imgs.indexOf(img)));
+}
+function lbClose(){ lb.close(); }
+dContent.addEventListener("click",e=>{ const im=e.target.closest(".d-emb img,.mgrid figure img"); if(im){ e.stopPropagation(); lbOpen(im);} });
+document.getElementById("lbClose").addEventListener("click",lbClose);
+lbPrev.addEventListener("click",()=>lbShow(lbI-1)); lbNext.addEventListener("click",()=>lbShow(lbI+1));
+lb.addEventListener("cancel",e=>{ e.preventDefault(); lbClose(); });
+lb.addEventListener("keydown",e=>{ if(e.key==="ArrowLeft") lbShow(lbI-1); if(e.key==="ArrowRight") lbShow(lbI+1); });
+/* нажатие — приблизить/отдалить, перетаскивание — двигать, два пальца — масштаб */
+let lbPts=new Map(), drag=null, moved=false, pinch=null;
+lbStage.addEventListener("pointerdown",e=>{ lbPts.set(e.pointerId,{x:e.clientX,y:e.clientY}); lbStage.setPointerCapture(e.pointerId); moved=false;
+  if(lbPts.size===2){ const [a,b]=[...lbPts.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y),s:Z.s}; drag=null; }
+  else drag={x:e.clientX,y:e.clientY,zx:Z.x,zy:Z.y}; });
+lbStage.addEventListener("pointermove",e=>{ if(!lbPts.has(e.pointerId)) return; lbPts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pinch&&lbPts.size===2){ const [a,b]=[...lbPts.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); moved=true;
+    lbZoomAt((a.x+b.x)/2,(a.y+b.y)/2,Math.min(5,Math.max(1,pinch.s*d/pinch.d))); return; }
+  if(drag&&Z.s>1){ const dx=e.clientX-drag.x, dy=e.clientY-drag.y; if(Math.abs(dx)+Math.abs(dy)>4) moved=true;
+    lbStage.classList.add("dragging"); Z.x=drag.zx+dx; Z.y=drag.zy+dy; lbClamp(); lbApply(); }
+  else if(drag&&Z.s===1&&lbPts.size===1){ const dx=e.clientX-drag.x; if(Math.abs(dx)>50){ moved=true; drag=null; lbShow(lbI+(dx<0?1:-1)); } } });
+function lbUp(e){ if(!lbPts.has(e.pointerId)) return; lbPts.delete(e.pointerId); lbStage.classList.remove("dragging");
+  if(lbPts.size<2) pinch=null;
+  if(lbPts.size===0){ const ir=lbImg.getBoundingClientRect(), onImg=e.clientX>=ir.left&&e.clientX<=ir.right&&e.clientY>=ir.top&&e.clientY<=ir.bottom;
+    if(!moved && onImg){ if(Z.s>1){ lbReset(); } else lbZoomAt(e.clientX,e.clientY,2.5); }
+    else if(!moved && !onImg && Z.s===1) lbClose(); drag=null; } }
+lbStage.addEventListener("pointerup",lbUp); lbStage.addEventListener("pointercancel",lbUp);
+lbStage.addEventListener("wheel",e=>{ e.preventDefault(); lbZoomAt(e.clientX,e.clientY,Math.min(5,Math.max(1,Z.s*(e.deltaY<0?1.2:1/1.2)))); },{passive:false});
+window.addEventListener("resize",()=>{ if(lb.open) lbReset(); });
+
 function fromHash(){ const h=location.hash; if(h.startsWith("#a-")) openAward(h.slice(3)); }
 window.addEventListener("hashchange",fromHash);
 
