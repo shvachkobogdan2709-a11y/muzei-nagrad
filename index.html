@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Музей отечественных наград</title>
+<link rel="icon" href="logo.png">
+<title>Музей воинской славы</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prata&family=PT+Sans:wght@400;700&family=PT+Mono&display=swap">
@@ -21,6 +22,7 @@
   --line:rgba(216,172,86,.22);
   --ok:#6fae6a;
   --bad:#d9534f;
+  --plate:#f6efe2;       /* светлая подложка логотипа */
   --photo-bg:#01000f;    /* фон музейных фотографий */
   --display:"Prata","Georgia","Times New Roman",serif;
   --body:"PT Sans","Segoe UI",Roboto,Arial,sans-serif;
@@ -51,6 +53,14 @@ a{color:var(--gold)}
 .top .wrap{display:flex;align-items:center;gap:16px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font-family:var(--display);font-size:18px}
 .brand svg{width:22px;height:22px}
+.logo-plate{display:inline-flex;align-items:center;background:var(--plate);border-radius:6px;padding:4px 7px;box-shadow:0 0 0 1px var(--gold-dim)}
+.logo-plate img{display:block;height:26px;width:auto}
+.logo-plate.big{border-radius:10px;padding:8px 12px}
+.logo-plate.big img{height:58px}
+.museum-id{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.museum-name{font:400 clamp(22px,3vw,28px)/1.15 var(--display);color:var(--ink);display:flex;flex-direction:column;gap:4px}
+.museum-name small{font:13px var(--mono);color:var(--muted);letter-spacing:.02em}
+@media (max-width:440px){.brand > span:last-child{font-size:16px}.logo-plate img{height:22px}.logo-plate.big img{height:46px}}
 .nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
 .nav a{color:var(--muted);text-decoration:none;font-size:14px;padding:6px 10px;border-radius:999px}
 .nav a:hover{color:var(--ink);background:var(--panel-2)}
@@ -248,8 +258,8 @@ dd{margin:0}
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#start">
-      <svg viewBox="0 0 24 24"><polygon points="12,1.5 14.6,8.6 22.2,8.9 16.2,13.6 18.3,21 12,16.7 5.7,21 7.8,13.6 1.8,8.9 9.4,8.6" fill="#c8252f" stroke="#d8ac56" stroke-width="1.2"/></svg>
-      Музей наград
+      <span class="logo-plate"><img src="logo.png" alt="Школа № 6, Рефтинский"></span>
+      <span>Музей воинской славы</span>
     </a>
     <nav class="nav" aria-label="Разделы">
       <a href="#halls">Залы</a>
@@ -263,6 +273,10 @@ dd{margin:0}
 <main class="wrap" id="start">
   <section class="hero">
     <div>
+      <div class="museum-id">
+        <span class="logo-plate big"><img src="logo.png" alt="Школа № 6, Рефтинский"></span>
+        <span class="museum-name">Музей воинской славы<small>Школа № 6, пгт Рефтинский</small></span>
+      </div>
       <span class="eyebrow">Интерактивная экспозиция · 1698 — наши дни</span>
       <h1>Ордена и медали <em>трёх эпох</em></h1>
       <p>Российская империя, Советский Союз и современная Россия: от ордена Андрея Первозванного, учреждённого Петром I, до наград наших дней. Выберите эпоху и зал, откройте экспонат и узнайте, за что им награждали и какие истории с ним связаны.</p>
