@@ -234,6 +234,53 @@ dd{margin:0}
 .lb-btn:hover{border-color:#d8ac56}
 .lb-btn[hidden]{display:none}
 .lb-x{position:absolute;top:max(10px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px))}
+/* гид музея */
+.guide-btn{position:fixed;z-index:6;right:max(16px,calc(env(safe-area-inset-right,0px) + 12px));bottom:max(16px,calc(env(safe-area-inset-bottom,0px) + 12px));
+  display:flex;align-items:center;gap:8px;font:700 15px var(--body);color:#fff;background:linear-gradient(135deg,var(--enamel),#8a1620);
+  border:1px solid var(--gold);border-radius:999px;padding:11px 18px 11px 14px;cursor:pointer;box-shadow:0 10px 28px -8px rgba(0,0,0,.7),0 0 0 4px rgba(200,37,47,.18)}
+.guide-btn svg{width:24px;height:24px;color:var(--gold)}
+.guide-btn:hover{filter:brightness(1.1)}
+.guide-btn.on{display:none}
+.guide{position:fixed;z-index:7;right:max(16px,calc(env(safe-area-inset-right,0px) + 12px));bottom:max(16px,calc(env(safe-area-inset-bottom,0px) + 12px));
+  width:min(400px,calc(100vw - 32px));height:min(600px,calc(100dvh - 110px));display:flex;flex-direction:column;
+  background:var(--panel);border:1px solid var(--gold-dim);border-radius:18px;box-shadow:0 24px 60px -12px rgba(0,0,0,.8);overflow:hidden}
+.guide[hidden]{display:none}
+.g-head{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 14px;background:linear-gradient(135deg,var(--enamel),#7a1420);color:#fff}
+.g-ava{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.25);display:grid;place-items:center;color:var(--gold);flex:none}
+.g-ava svg{width:20px;height:20px}
+.g-title{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
+.g-title b{font:400 18px var(--display)}
+.g-title small{font-size:12px;opacity:.85}
+.g-x{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;font-size:20px;cursor:pointer;flex:none}
+.g-log{flex:1;min-height:0;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.g-msg{max-width:88%;padding:10px 12px;border-radius:14px;font-size:15px;line-height:1.45;overflow-wrap:anywhere}
+.g-bot{align-self:flex-start;background:var(--panel-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.g-me{align-self:flex-end;background:var(--enamel);color:#fff;border-bottom-right-radius:4px}
+.g-list{margin:6px 0 2px;padding-left:20px}
+.g-list li{margin:2px 0}
+.g-fact{display:block;margin-top:6px;color:var(--muted)}
+.g-note{margin:8px 0 0;color:var(--muted);font-size:13px}
+.g-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.g-chip{font:600 13px/1.25 var(--body);text-align:left;color:var(--ink);background:var(--panel);border:1px solid var(--gold-dim);border-radius:10px;padding:6px 9px;cursor:pointer}
+.g-chip span{color:var(--gold);font:12px var(--mono);margin-left:4px}
+.g-chip:hover{border-color:var(--gold)}
+.g-sugg{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.g-s{font:14px var(--body);text-align:left;color:var(--gold);background:transparent;border:1px solid var(--gold-dim);border-radius:10px;padding:7px 10px;cursor:pointer}
+.g-s:hover{background:var(--panel)}
+.g-link{color:var(--gold)}
+.g-typing{display:inline-flex;gap:4px;padding:4px 2px}
+.g-typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:gdot 1s infinite}
+.g-typing i:nth-child(2){animation-delay:.15s}.g-typing i:nth-child(3){animation-delay:.3s}
+@keyframes gdot{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.g-form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:var(--panel)}
+.g-form input{flex:1;min-width:0;font:15px var(--body);color:var(--ink);background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:10px 14px}
+.g-form input::placeholder{color:var(--muted)}
+.g-form button{width:42px;height:42px;flex:none;border-radius:50%;border:0;background:var(--gold);color:#22140a;cursor:pointer;display:grid;place-items:center}
+.g-form button svg{width:20px;height:20px}
+@media (max-width:520px){
+  .guide{right:0;left:0;bottom:0;width:100%;height:min(88dvh,640px);border-radius:18px 18px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .guide-btn span{display:none}.guide-btn{padding:13px}
+}
 .x{position:sticky;top:10px;float:right;margin:10px 10px 0 0;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);font-size:20px;cursor:pointer;z-index:2}
 
 @media (max-width:760px){
@@ -313,6 +360,24 @@ dd{margin:0}
   </section>
 
 </main>
+
+<button class="guide-btn" id="guideBtn" type="button" aria-controls="guide" aria-expanded="false">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4h0A2.5 2.5 0 0 1 4 13.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><polygon points="12,6.2 13.1,8.6 15.7,8.8 13.7,10.5 14.3,13 12,11.7 9.7,13 10.3,10.5 8.3,8.8 10.9,8.6" fill="currentColor"/></svg>
+  <span>Гид музея</span>
+</button>
+<section class="guide" id="guide" hidden aria-label="Гид музея">
+  <header class="g-head">
+    <span class="g-ava" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="12,2.5 14.6,8.6 21.2,9 16.2,13.3 17.8,19.8 12,16.3 6.2,19.8 7.8,13.3 2.8,9 9.4,8.6" fill="currentColor"/></svg></span>
+    <span class="g-title"><b>Гид музея</b><small>Отвечает по материалам экспозиции</small></span>
+    <button class="g-x" id="gClose" type="button" aria-label="Закрыть гида">×</button>
+  </header>
+  <div class="g-log" id="gLog" aria-live="polite"></div>
+  <form class="g-form" id="gForm" autocomplete="off">
+    <label for="gInput" hidden>Ваш вопрос</label>
+    <input id="gInput" type="text" placeholder="Например: за что давали орден Славы?" maxlength="200">
+    <button type="submit" aria-label="Спросить"><svg viewBox="0 0 24 24"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </form>
+</section>
 
 <dialog id="dlg" aria-labelledby="dTitle">
   <button class="x" id="dClose" type="button" aria-label="Закрыть">×</button>
@@ -1473,6 +1538,203 @@ function quizEnd(){
   quizBox.innerHTML=`<div class="q-emb">${emblem(byId[score>=7?"victory":score>=5?"red-star":"merit"])}</div><div><div class="meta">Итог: ${score} из ${Q.length}</div><h3>Ваше звание — ${rank}</h3><p class="feedback">${score===Q.length?"Безупречно. Музею нужен такой экскурсовод.":"Загляните в залы: ответы на все вопросы спрятаны в карточках экспонатов."}</p><div class="row"><button class="btn" type="button" id="qAgain">Пройти ещё раз</button><a class="btn ghost" href="#halls">В залы</a></div></div>`;
   document.getElementById("qAgain").onclick=()=>{Q=makeQuestions(); qi=0; score=0; quizShow();};
 }
+
+/* ===== ГИД МУЗЕЯ: отвечает по материалам экспозиции ===== */
+(function(){
+const G={
+  btn:document.getElementById("guideBtn"), panel:document.getElementById("guide"),
+  log:document.getElementById("gLog"), form:document.getElementById("gForm"), input:document.getElementById("gInput")
+};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=t=>String(t).toLowerCase().replace(/ё/g,"е").replace(/[«»"“”„.,!?;:()\[\]—–\-\/]+/g," ").replace(/\s+/g," ").trim();
+const stem=w=>w.length<=5?w.slice(0,4):w.length<=7?w.slice(0,5):w.slice(0,w.length-2);
+const STOP=new Set(("за в во на и с со по о об от до из к у для что как кто какой какая какое какие каких каким когда где это ли был была было были есть мне расскажи расскажите скажи скажите покажи про а же ну его ее их такое такой сколько самый самая самое самые самых " +
+ "орден ордена орденом ордену орденов медаль медали медалью медалей награда награды наград наградой наградами знак знаки давали дают вручали вручался вручалась получил получила получили получали учрежден учреждена учреждено учредили появился появилась появилось " +
+ "выглядит выглядят сделан сделана сделаны материал металл интересный интересное факт факты история истории историю год году года годы лет человек людей кавалер кавалеры кавалеров музее музей нашем есть ли можно посмотреть степень степени святого святой великомученицы великомученика апостола равноапостольного князя над").split(" "));
+const tokens=t=>norm(t).split(" ").filter(w=>w.length>=3);
+const stems=t=>tokens(t).filter(w=>!STOP.has(w)).map(stem);
+const same=(a,b)=>{ const [x,y]=a.length<=b.length?[a,b]:[b,a]; return x.length>=3&&y.startsWith(x)&&x.length/y.length>=.7; };
+const ERA_NAME={empire:"Российская империя",ussr:"СССР",rf:"Российская Федерация"};
+const IDX=AWARDS.map(a=>({a,ns:[...new Set(stems(a.name))],kind:/^орден/i.test(a.name)?"order":/^медаль/i.test(a.name)?"medal":"other"}));
+
+function chip(a){ return `<button type="button" class="g-chip" data-open="${a.id}">${esc(a.name)} <span>${a.year}</span></button>`; }
+function chips(list){ return `<div class="g-chips">${list.map(chip).join("")}</div>`; }
+function detectEra(q){
+  if(/импер|царск|дореволюц|петр|екатерин(ы|е) ii/.test(q)) return "empire";
+  if(/ссср|совет|великой отечеств|в годы войны/.test(q)) return "ussr";
+  if(/(^| )рф( |$)|росси|современн|наши дни|сегодня|сейчас/.test(q)) return "rf";
+  return null;
+}
+function detectKind(q){ if(/(^| )медал/.test(q)) return "medal"; if(/(^| )орден/.test(q)) return "order"; return null; }
+function inEra(a,e){ return !e||eraOf(a)===e; }
+function parseCount(s){
+  const m=String(s).replace(/\u00a0/g," ").match(/(\d[\d ]*(?:[.,]\d+)?)\s*(млн|тыс)?/); if(!m) return null;
+  let n=parseFloat(m[1].replace(/ /g,"").replace(",",".")); if(m[2]==="млн") n*=1e6; if(m[2]==="тыс") n*=1e3; return n||null;
+}
+function matchAward(q,era,kind){
+  const qs=[...new Set(stems(q))]; if(!qs.length) return [];
+  const res=[];
+  for(const it of IDX){
+    if(!inEra(it.a,era)) continue;
+    const hit=qs.filter(s=>it.ns.some(n=>same(n,s))).length; if(!hit) continue;
+    const covered=it.ns.filter(n=>qs.some(s=>same(n,s))).length;
+    let score=hit*2+covered/it.ns.length; if(kind&&it.kind===kind) score+=.6; else if(kind&&it.kind!=="other") score-=.6;
+    res.push({a:it.a,score,ratio:covered/it.ns.length,hit});
+  }
+  return res.sort((x,y)=>y.score-x.score);
+}
+function sentenceWith(text,qs){
+  const parts=String(text).split(/(?<=[.!?])\s+/);
+  return parts.find(p=>tokens(p).some(w=>qs.some(s=>same(stem(w),s))))||parts[0];
+}
+function eraNote(e){ return e?` (${ERA_NAME[e]})`:""; }
+
+/* ---- ответы ---- */
+function answerAward(q,a,others){
+  const pick=[
+    [/за что|кому|зачем|чем заслуж|в каких случаях|статут/,"statute",x=>`<b>${esc(x.name)}</b> вручали так: ${esc(x.statute.charAt(0).toLowerCase()+x.statute.slice(1))}.`],
+    [/сколько (раз|человек|людей|наград|кавалер|получ|выдал|вручил)|число награжд|скольким/,"count",x=>`<b>${esc(x.name)}</b>: число награждений — ${esc(x.count)}.`],
+    [/из чего|материал|металл|сделан|золот|серебр|платин/,"material",x=>`<b>${esc(x.name)}</b> изготавливали так: ${esc(x.material)}.`],
+    [/как выгляд|внешн|изображ|что на нем|что на ней|лент[аеуы]|описани/,"look",x=>esc(x.look)],
+    [/кто (получ|был награжд|награжд)|кавалер|кого наград|известн|героями/,"people",x=>`Известные кавалеры: ${esc(x.people)}`],
+    [/когда|в каком году|какого года|учрежд|появил|дата/,"est",x=>`<b>${esc(x.name)}</b> учреждена: ${esc(x.est)}.`],
+    [/истори|откуда|почему появ|зачем созда/,"history",x=>esc(x.history)],
+    [/интересн|факт|любопытн/,"fact",x=>esc(x.fact)]
+  ];
+  let body=null;
+  for(const [re,,fn] of pick){ if(re.test(q)&&a){ body=fn(a); break; } }
+  if(!body) body=`<b>${esc(a.name)}</b> — ${esc(a.sub.charAt(0).toLowerCase()+a.sub.slice(1))}, ${ERA_NAME[eraOf(a)]}, ${a.year} год.<br>${esc(a.statute)}.<br><span class="g-fact">${esc(a.fact)}</span>`;
+  let out=body+chips([a]);
+  if(a.inMuseum) out+=`<p class="g-note">Модель этой награды есть в нашем музее, её фото в карточке.</p>`;
+  if(others.length) out+=`<p class="g-note">Похожие экспонаты:</p>`+chips(others);
+  return out;
+}
+function answerSuper(q,era,kind){
+  let list=AWARDS.filter(a=>inEra(a,era)&&(!kind||(kind==="order"?/^орден/i:/^медаль/i).test(a.name)));
+  const what=kind==="medal"?"медаль":kind==="order"?"орден":"награда";
+  if(/стар|перв|древн|ранн/.test(q)){
+    const m=Math.min(...list.map(a=>a.year)), r=list.filter(a=>a.year===m);
+    return `Самая ранняя ${what} в музее${eraNote(era)} — ${m} год.`+chips(r)+`<p class="g-note">${esc(r[0].fact)}</p>`;
+  }
+  if(/нов|последн|молод|поздн|свеж/.test(q)){
+    const m=Math.max(...list.map(a=>a.year)), r=list.filter(a=>a.year===m);
+    return `Самая поздняя ${what} в музее${eraNote(era)} учреждена в ${m} году.`+chips(r);
+  }
+  const counted=list.map(a=>({a,n:parseCount(a.count)})).filter(x=>x.n);
+  if(/массов|распростран|больше всего|чаще всего/.test(q)){
+    const top=counted.sort((x,y)=>y.n-x.n).slice(0,3);
+    return `Больше всего награждений${eraNote(era)}:<ol class="g-list">${top.map(x=>`<li>${esc(x.a.name)} — ${esc(x.a.count)}</li>`).join("")}</ol>`+chips(top.map(x=>x.a));
+  }
+  if(/дорог|ценн|драгоцен|бриллиант/.test(q)){
+    const v=byId["victory"]; return `Самая дорогая награда СССР — <b>орден «Победа»</b>: ${esc(v.material.toLowerCase())}.`+chips([v]);
+  }
+  if(/редк|меньше всего|реже всего/.test(q)){
+    const top=counted.sort((x,y)=>x.n-y.n).slice(0,3);
+    return `Самые редкие награды${eraNote(era)}:<ol class="g-list">${top.map(x=>`<li>${esc(x.a.name)} — ${esc(x.a.count)}</li>`).join("")}</ol>`+chips(top.map(x=>x.a));
+  }
+  return null;
+}
+function answerYear(q,era){
+  let from,to,label;
+  const y=q.match(/\b(1[6-9]\d\d|20[0-2]\d)\b/g);
+  if(y&&y.length>=2){ from=+y[0]; to=+y[1]; label=`с ${from} по ${to} год`; }
+  else if(y){ from=to=+y[0]; label=`в ${from} году`; }
+  else if(/войн|1941|фронт/.test(q)){ from=1941; to=1945; label="в годы Великой Отечественной войны (1941–1945)"; }
+  else { const d=q.match(/\b(1[6-9]|20)(\d)0[- ]?х/); if(!d) return null; from=+(d[1]+d[2]+"0"); to=from+9; label=`в ${from}-е годы`; }
+  if(from>to) [from,to]=[to,from];
+  const list=AWARDS.filter(a=>a.year>=from&&a.year<=to&&inEra(a,era)).sort((a,b)=>a.year-b.year);
+  if(!list.length) return `Среди экспонатов музея нет наград, учреждённых ${label}.`;
+  return `Учреждены ${label}${list.length>1?` — ${list.length} экспонат${list.length%10===1&&list.length!==11?"":list.length%10>=2&&list.length%10<=4&&(list.length<12||list.length>14)?"а":"ов"}`:""}:`+chips(list);
+}
+function answerMuseum(){
+  const list=AWARDS.filter(a=>a.inMuseum);
+  return `Модели этих наград можно увидеть в нашем музее вживую — их напечатали на 3D-принтере:`+chips(list)+`<p class="g-note">На стендах сайта они отмечены знаком «Есть в музее».</p>`;
+}
+function answerStats(q,era){
+  if(/зал/.test(q)){
+    const hs=HALLS.filter(h=>!era||h.era===era);
+    return `В музее ${hs.length} залов${eraNote(era)}:<ol class="g-list">${hs.map(h=>`<li>${esc(h.name)} — ${ERA_NAME[h.era]}</li>`).join("")}</ol>`;
+  }
+  const by=ERAS.map(e=>`<li>${e.name} (${e.years}) — ${AWARDS.filter(a=>eraOf(a)===e.id).length}</li>`).join("");
+  return `В музее ${AWARDS.length} экспонатов в ${HALLS.length} залах:<ol class="g-list">${by}</ol>Модели ${AWARDS.filter(a=>a.inMuseum).length} наград можно посмотреть вживую.`;
+}
+function answerSearch(q,era){
+  const qs=[...new Set(stems(q))]; if(!qs.length) return null;
+  const F=[["name",5],["sub",3],["people",3],["fact",2],["history",2],["statute",1],["look",1],["material",1]];
+  const res=[];
+  for(const a of AWARDS){ if(!inEra(a,era)) continue;
+    let sc=0, field=null, hits=new Set();
+    for(const [f,w] of F){ const ts=tokens(a[f]||"").map(stem); const h=qs.filter(s=>ts.some(t=>same(t,s)));
+      if(h.length){ sc+=w*h.length; h.forEach(x=>hits.add(x)); if(!field&&f!=="name"&&f!=="sub") field=f; } }
+    if(sc) res.push({a,sc:sc*hits.size,field});
+  }
+  if(!res.length) return null;
+  res.sort((x,y)=>y.sc-x.sc); const top=res.slice(0,4);
+  return `Вот что я нашёл в материалах музея:<ul class="g-list">${top.map(r=>`<li><b>${esc(r.a.name)}.</b> ${esc(sentenceWith(r.a[r.field||"fact"],qs))}</li>`).join("")}</ul>`+chips(top.map(r=>r.a));
+}
+const HELP=`Я гид Музея воинской славы. Отвечаю по материалам всех ${AWARDS.length} экспонатов. Можно спросить, например:
+<ul class="g-list"><li>За что давали орден Славы?</li><li>Какая награда самая старая?</li><li>Что учредили в 1943 году?</li><li>Кто получил орден «Победа»?</li><li>Из чего сделан орден Ленина?</li><li>Какие модели есть в музее?</li></ul>`;
+
+function reply(raw){
+  const q=norm(raw); if(!q) return HELP;
+  if(/^(привет|здравств|добр(ый|ое|ого) (день|утро|вечер)|хай|салют)/.test(q)) return "Здравствуйте! "+HELP;
+  if(/^(спасибо|благодар|спс|понятно|ясно|ок|хорошо)/.test(q)) return "Пожалуйста! Спрашивайте ещё — расскажу о любой награде музея.";
+  if(/(кто ты|что ты умеешь|помощ|помоги|что можно спросить|как пользоват)/.test(q)) return HELP;
+  if(/викторин|тест|проверить себя/.test(q)) return `Викторина — в конце страницы: восемь вопросов, а в конце вы получите воинское звание. <a href="#quiz" class="g-link" data-close>Перейти к викторине</a>`;
+  const era=detectEra(q), kind=detectKind(q);
+  if(/сам(ая|ый|ое|ые|ых)|старейш|больше всего|меньше всего|чаще всего|реже всего|какой был перв|какая была перв|первый орден|первая медаль|первая наград/.test(q)){
+    const r=answerSuper(q,era,kind); if(r) return r;
+  }
+  if(/в музее|вживую|модел|3d|напечат|в зале музея|экспонаты музея есть/.test(q)) return answerMuseum();
+  if(/сколько (всего )?(экспонат|наград|залов|зал|орденов|медалей)|сколько их/.test(q)) return answerStats(q,era);
+  if(/в годы (великой отечественной )?войны|во время (великой отечественной )?войны|военн(ые|ых) год|1941.{0,3}1945/.test(q)) return answerYear(q.replace(/\b(19\d\d)\b/g,""),era);
+  const yr=(q.match(/\b(1[6-9]\d\d|20[0-2]\d)\b/)||[])[1];
+  const byYearName=yr&&AWARDS.find(a=>a.name.includes(yr)&&inEra(a,era));
+  if(byYearName) return answerAward(q,byYearName,[]);
+  const m=matchAward(q,era,kind);
+  if(m.length&&m[0].ratio>=.34){
+    const best=m[0], others=m.slice(1).filter(x=>x.hit===best.hit&&x.ratio>=.6&&x.a.id!==best.a.id).slice(0,3).map(x=>x.a);
+    return answerAward(q,best.a,others);
+  }
+  const y=answerYear(q,era); if(y) return y;
+  const s=answerSearch(q,era);
+  const asksWhich=/(^| )(как(ой|ая|ие|ую|им|их)|кто|что|чем|сколько|где|когда)( |$)/.test(q);
+  if(s&&kind&&!asksWhich) return `Такой награды в музее пока нет. `+s.replace("Вот что я нашёл в материалах музея:","Но вот что есть в материалах музея:");
+  if(s) return s;
+  if(kind&&!asksWhich) return `Такой награды в музее пока нет. Спросите про другую — например, «орден Кутузова» или «медаль За отвагу».`;
+  return `Об этом в материалах музея ничего нет. Попробуйте спросить про конкретную награду, год или полководца — например, «орден Кутузова» или «награды 1945 года».`;
+}
+
+/* ---- интерфейс ---- */
+function add(html,who){
+  const d=document.createElement("div"); d.className="g-msg "+(who==="me"?"g-me":"g-bot"); d.innerHTML=html;
+  G.log.appendChild(d); G.log.scrollTop=G.log.scrollHeight; return d;
+}
+function ask(text){
+  if(!text.trim()) return;
+  add(esc(text),"me"); const t=add('<span class="g-typing"><i></i><i></i><i></i></span>',"bot");
+  setTimeout(()=>{ t.innerHTML=reply(text); G.log.scrollTop=G.log.scrollHeight; },380);
+}
+const SUGGEST=["Какая награда самая старая?","За что давали орден Славы?","Что учредили в 1943 году?","Какие модели есть в музее?","Кто получил орден «Победа»?"];
+let started=false;
+function open(){
+  G.panel.hidden=false; G.btn.setAttribute("aria-expanded","true"); G.btn.classList.add("on");
+  if(!started){ started=true;
+    add(`Здравствуйте! Я гид музея и расскажу о любой из ${AWARDS.length} наград. Задайте вопрос или выберите один из этих:`+
+      `<div class="g-sugg">${SUGGEST.map(s=>`<button type="button" class="g-s">${esc(s)}</button>`).join("")}</div>`,"bot"); }
+  setTimeout(()=>G.input.focus(),50);
+}
+function close(){ G.panel.hidden=true; G.btn.setAttribute("aria-expanded","false"); G.btn.classList.remove("on"); }
+G.btn.addEventListener("click",()=>G.panel.hidden?open():close());
+document.getElementById("gClose").addEventListener("click",close);
+G.form.addEventListener("submit",e=>{ e.preventDefault(); const v=G.input.value; G.input.value=""; ask(v); });
+G.log.addEventListener("click",e=>{
+  const s=e.target.closest(".g-s"); if(s){ ask(s.textContent); return; }
+  if(e.target.closest("[data-close]")) close();
+});
+G.panel.addEventListener("keydown",e=>{ if(e.key==="Escape") close(); });
+window.museumGuideReply=reply;
+})();
 
 document.body.dataset.era=era; renderEras(); renderChips(); renderHalls(); renderTimeline(); updateProgress(); quizStart(); fromHash();
 </script>
