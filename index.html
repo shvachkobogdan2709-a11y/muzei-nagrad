@@ -234,6 +234,20 @@ dd{margin:0}
 .lb-btn:hover{border-color:#d8ac56}
 .lb-btn[hidden]{display:none}
 .lb-x{position:absolute;top:max(10px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px))}
+/* рассказ экскурсовода */
+.tour{margin-top:14px;background:var(--panel-2);border:1px solid var(--gold-dim);border-radius:14px;padding:10px 12px 12px}
+.tour-btn{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;padding:0;color:var(--ink);cursor:pointer;text-align:left;font:inherit}
+.tour-ic{width:44px;height:44px;flex:none;border-radius:50%;background:var(--gold);color:#22140a;display:grid;place-items:center}
+.tour-ic svg{width:22px;height:22px}
+.tour-ic .pa,.tour-btn.playing .pl{display:none}.tour-btn.playing .pa{display:block}
+.tour-tx{display:flex;flex-direction:column;line-height:1.25}
+.tour-tx b{font:400 17px var(--display)}
+.tour-tx small{font:12px var(--mono);color:var(--muted)}
+.tour-bar{height:4px;border-radius:2px;background:var(--panel);margin-top:10px;overflow:hidden;cursor:pointer}
+.tour-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--enamel),var(--gold))}
+.g-rec{display:inline-flex;align-items:center;gap:6px;margin:8px 6px 0 0;font:600 12px var(--body);color:#22140a;background:var(--gold);border:0;border-radius:999px;padding:5px 11px 5px 8px;cursor:pointer}
+.g-rec svg{width:15px;height:15px}
+.g-rec.playing{animation:gpulse 1.2s ease-in-out infinite}
 /* гид музея */
 .g-voice svg{width:20px;height:20px}
 .g-voice .off-i,.g-voice[aria-pressed="false"] .on-i{display:none}
@@ -773,7 +787,7 @@ const AWARDS = [
     history:"III степень добавили в феврале 1943 года, чтобы орденом можно было награждать командиров более низкого ранга.",
     fact:"Статут отмечал и умело организованный отход крупных сил с наименьшими потерями — в духе тактики самого Кутузова.",
     q:"Могла отметить даже грамотно организованный отход войск",
-    shape:"rays", metal:"silver", enamel:"#e9edf0", rays:8, photo:"kutuzov.jpg", inMuseum:true, media:[ { type:"image", src:"model-kutuzov.jpg", caption:"Экспонат нашего музея — модель, напечатанная на 3D-принтере", model:true }, { type:"image", src:"kutuzov-all.jpg", caption:"Три степени ордена" } ] },
+    shape:"rays", metal:"silver", enamel:"#e9edf0", rays:8, photo:"kutuzov.jpg", audio:"audio-kutuzov.mp3", inMuseum:true, media:[ { type:"image", src:"model-kutuzov.jpg", caption:"Экспонат нашего музея — модель, напечатанная на 3D-принтере", model:true }, { type:"image", src:"kutuzov-all.jpg", caption:"Три степени ордена" } ] },
   { id:"nevsky", hall:"war", name:"Орден Александра Невского", sub:"Для командиров от взвода до дивизии",
     year:1942, est:"29 июля 1942", material:"Серебро, позолота, эмаль",
     statute:"За инициативу и умелые действия, принёсшие победу с малыми потерями", count:"42 165",
@@ -1415,6 +1429,7 @@ function mediaHTML(a){
 }
 function openAward(id){
   const a=byId[id]; if(!a) return;
+  if(audBtn&&dContent.contains(audBtn)) stopRec();
   const list=AWARDS.filter(x=>eraOf(x)===eraOf(a));
   const i=list.indexOf(a), prev=list[(i-1+list.length)%list.length], next=list[(i+1)%list.length];
   const hall=hallById[a.hall];
@@ -1433,6 +1448,7 @@ function openAward(id){
           <dt>Награждений</dt><dd>${a.count}</dd>
         </dl>
         <p class="fact"><b>Интересный факт</b>${a.fact}</p>
+        ${a.audio?`<div class="tour"><button type="button" class="tour-btn" data-audio="${a.audio}"><span class="tour-ic"><svg class="pl" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24"><path d="M7.5 5h3v14h-3zM13.5 5h3v14h-3z" fill="currentColor"/></svg></span><span class="tour-tx"><b>Рассказ экскурсовода</b><small class="tour-time">аудио</small></span></button><div class="tour-bar" role="presentation"><i></i></div></div>`:""}
       </div>
     </div>
     <div class="more">
@@ -1450,7 +1466,7 @@ function openAward(id){
   markSeen(id);
   if(location.hash!=="#a-"+id){ try{history.replaceState(null,"","#a-"+id);}catch(e){} }
 }
-function closeDlg(){ dlg.close(); try{history.replaceState(null,"",location.pathname+location.search);}catch(e){} }
+function closeDlg(){ stopRec(); dlg.close(); try{history.replaceState(null,"",location.pathname+location.search);}catch(e){} }
 document.getElementById("dClose").addEventListener("click",closeDlg);
 dlg.addEventListener("click",e=>{ if(e.target===dlg) closeDlg(); });
 dlg.addEventListener("cancel",e=>{ e.preventDefault(); closeDlg(); });
@@ -1459,6 +1475,32 @@ document.getElementById("randomBtn").addEventListener("click",()=>{
   const pool=AWARDS.filter(a=>!seen.has(a.id)); const src=pool.length?pool:AWARDS;
   openAward(src[Math.floor(Math.random()*src.length)].id);
 });
+/* ===== РАССКАЗ ЭКСКУРСОВОДА (записи голоса) ===== */
+const AUD=new Audio(); AUD.preload="none"; let audBtn=null;
+const fmt=t=>isFinite(t)?Math.floor(t/60)+":"+String(Math.floor(t%60)).padStart(2,"0"):"";
+function audUI(){ if(!audBtn) return; const box=audBtn.closest(".tour"); 
+  if(box){ box.querySelector(".tour-bar i").style.width=(AUD.duration?AUD.currentTime/AUD.duration*100:0)+"%";
+    const t=box.querySelector(".tour-time"); if(t&&AUD.duration) t.textContent=fmt(AUD.currentTime)+" / "+fmt(AUD.duration); } }
+function stopRec(){ AUD.pause(); if(audBtn){ audBtn.classList.remove("playing"); } }
+function playRec(src,btn){
+  if(audBtn===btn&&!AUD.paused){ AUD.pause(); return; }
+  window.museumStopSpeak?.();
+  if(audBtn&&audBtn!==btn) audBtn.classList.remove("playing");
+  if(!AUD.src.endsWith(src)){ AUD.src=src; }
+  audBtn=btn; btn.classList.add("playing");
+  AUD.play().catch(()=>{ btn.classList.remove("playing"); });
+}
+AUD.addEventListener("timeupdate",audUI); AUD.addEventListener("loadedmetadata",audUI);
+AUD.addEventListener("pause",()=>audBtn&&audBtn.classList.remove("playing"));
+AUD.addEventListener("play",()=>audBtn&&audBtn.classList.add("playing"));
+AUD.addEventListener("ended",()=>{ if(audBtn){ audBtn.classList.remove("playing"); } AUD.currentTime=0; audUI(); });
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-audio]"); if(b){ e.preventDefault(); playRec(b.dataset.audio,b); return; }
+  const bar=e.target.closest(".tour-bar"); if(bar&&audBtn&&bar.closest(".tour")===audBtn.closest(".tour")&&AUD.duration){
+    const r=bar.getBoundingClientRect(); AUD.currentTime=(e.clientX-r.left)/r.width*AUD.duration; audUI(); }
+});
+window.museumStopRec=stopRec;
+
 /* ===== ПРОСМОТР ФОТО ===== */
 const lb=document.getElementById("lb"), lbStage=document.getElementById("lbStage"), lbImg=document.getElementById("lbImg");
 const lbCap=document.getElementById("lbCap"), lbPrev=document.getElementById("lbPrev"), lbNext=document.getElementById("lbNext");
@@ -1619,8 +1661,10 @@ function answerAward(q,a,others){
   ];
   let body=null;
   for(const [re,,fn] of pick){ if(re.test(q)&&a){ body=fn(a); break; } }
+  const summary=!body;
   if(!body) body=`<b>${esc(a.name)}</b> — ${esc(a.sub.charAt(0).toLowerCase()+a.sub.slice(1))}, ${ERA_NAME[eraOf(a)]}, ${a.year} год.<br>${esc(a.statute)}.<br><span class="g-fact">${esc(a.fact)}</span>`;
   let out=body+chips([a]);
+  if(a.audio) out+=`<button type="button" class="g-rec" data-audio="${a.audio}"${summary?" data-auto":""}><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>Рассказ экскурсовода</button>`;
   if(a.inMuseum) out+=`<p class="g-note">Модель этой награды есть в нашем музее, её фото в карточке.</p>`;
   if(others.length) out+=`<p class="g-note">Похожие экспонаты:</p>`+chips(others);
   return out;
@@ -1736,15 +1780,15 @@ function setVoiceBtn(){ vBtn.setAttribute("aria-pressed",voiceOn); vBtn.title=vB
 if(!TTS) vBtn.hidden=true; else setVoiceBtn();
 vBtn.addEventListener("click",()=>{ voiceOn=!voiceOn; setVoiceBtn(); if(!voiceOn) stopSpeak(); try{localStorage.setItem("guide-voice",voiceOn?"on":"off");}catch(e){} });
 function speechText(el){
-  const c=el.cloneNode(true); c.querySelectorAll(".g-say,.g-sugg,.g-chip span").forEach(x=>x.remove());
+  const c=el.cloneNode(true); c.querySelectorAll(".g-say,.g-rec,.g-sugg,.g-chip span").forEach(x=>x.remove());
   const hasList=!!c.querySelector("li");
   c.querySelectorAll(".g-chips").forEach(x=>{ const n=[...x.querySelectorAll(".g-chip")].map(b=>b.textContent.trim()); x.replaceWith(!hasList&&n.length>1?" "+n.join(". ")+". ":" "); });
   c.querySelectorAll("li").forEach(li=>{ li.prepend(" "); li.append(". "); });
   return c.textContent.replace(/≈\s*/g,"около ").replace(/№\s*/g,"номер ").replace(/(^|\s)ст\./g,"$1степени").replace(/[«»"]/g,"").replace(/(\d)\s*млн/g,"$1 миллионов").replace(/(\d)\s*тыс\.?/g,"$1 тысяч").replace(/вкл\./g,"включая").replace(/—/g,", ").replace(/\s+([,.:])/g,"$1").replace(/\.{2,}/g,".").replace(/:(\S)/g,": $1").replace(/\s+/g," ").trim();
 }
-function stopSpeak(){ if(TTS) TTS.cancel(); if(playing){ playing.classList.remove("playing"); playing=null; } }
+function stopSpeak(){ if(TTS) TTS.cancel(); window.museumStopRec?.(); if(playing){ playing.classList.remove("playing"); playing=null; } }
 function speak(msg){
-  if(!TTS) return; stopSpeak();
+  if(!TTS) return; stopSpeak(); window.museumStopRec?.();
   const btn=msg.querySelector(".g-say"); const u=new SpeechSynthesisUtterance(speechText(msg));
   u.lang="ru-RU"; if(ruVoice) u.voice=ruVoice; u.rate=1; u.pitch=1;
   u.onend=u.onerror=()=>{ if(playing===btn){ btn.classList.remove("playing"); playing=null; } };
@@ -1758,27 +1802,48 @@ function add(html,who){
 }
 function finishBot(d,auto){
   if(TTS){ const b=document.createElement("button"); b.type="button"; b.className="g-say"; b.innerHTML=SAY_ICON+"<span>Прослушать</span>"; d.appendChild(b); }
-  G.log.scrollTop=G.log.scrollHeight; if(auto&&voiceOn) speak(d);
+  G.log.scrollTop=G.log.scrollHeight;
+  if(auto&&voiceOn){ const r=d.querySelector(".g-rec[data-auto]"); if(r) r.click(); else speak(d); }
 }
+window.museumStopSpeak=()=>{ if(TTS) TTS.cancel(); if(playing){ playing.classList.remove("playing"); playing=null; } };
 function ask(text){
   if(!text.trim()) return;
   stopSpeak(); add(esc(text),"me"); const t=add('<span class="g-typing"><i></i><i></i><i></i></span>',"bot");
   setTimeout(()=>{ t.innerHTML=reply(text); finishBot(t,true); },380);
 }
-/* ---- голос: вопрос через микрофон (Chrome, Edge, Android, Safari) ---- */
+/* ---- голос: вопрос через микрофон (Chrome, Edge, Safari, Android) ---- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition, mic=document.getElementById("gMic");
-let rec=null;
+const PH="Например: за что давали орден Славы?";
+const isYa=/YaBrowser/i.test(navigator.userAgent), isMobile=/Android|iPhone|iPad/i.test(navigator.userAgent);
+const KEYB=isMobile?" Можно нажать на поле ввода и продиктовать вопрос через значок микрофона на клавиатуре телефона — это работает всегда.":"";
+const MIC_ERR={
+  "not-allowed":"Браузер не разрешил доступ к микрофону. Нажмите на значок замка слева от адреса сайта, выберите «Микрофон → Разрешить» и обновите страницу.",
+  "service-not-allowed":"Распознавание речи в этом браузере отключено."+(isYa?" В Яндекс Браузере оно часто не работает — откройте сайт в Google Chrome или Microsoft Edge.":" Попробуйте Google Chrome или Microsoft Edge."),
+  "network":"Не удалось связаться со службой распознавания речи."+(isYa?" Яндекс Браузер её не поддерживает — откройте сайт в Google Chrome или Microsoft Edge.":" Проверьте интернет или откройте сайт в Google Chrome или Microsoft Edge."),
+  "no-speech":"Я ничего не расслышал. Нажмите на микрофон и говорите сразу, чуть громче.",
+  "audio-capture":"Микрофон не найден. Проверьте, что он подключён и не занят другой программой.",
+  "language-not-supported":"Этот браузер не умеет распознавать русскую речь. Попробуйте Google Chrome или Microsoft Edge."
+};
+let rec=null, micMsg=null;
+function micStatus(html){ if(micMsg&&micMsg.isConnected) micMsg.innerHTML=html; else micMsg=add(html,"bot"); G.log.scrollTop=G.log.scrollHeight; }
+function micDone(){ mic.classList.remove("rec"); mic.setAttribute("aria-label","Спросить голосом"); G.input.placeholder=PH; rec=null; }
 if(SR){ mic.hidden=false;
   mic.addEventListener("click",()=>{
     if(rec){ rec.stop(); return; }
-    stopSpeak(); rec=new SR(); rec.lang="ru-RU"; rec.interimResults=true; rec.maxAlternatives=1;
-    mic.classList.add("rec"); G.input.placeholder="Говорите, я слушаю…";
-    let final="";
-    rec.onresult=e=>{ let t=""; for(const r of e.results){ t+=r[0].transcript; if(r.isFinal) final=t; } G.input.value=t; };
-    rec.onerror=e=>{ if(e.error==="not-allowed"||e.error==="service-not-allowed"){ add("Нет доступа к микрофону. Разрешите его в настройках браузера или напишите вопрос текстом.","bot"); } };
-    rec.onend=()=>{ mic.classList.remove("rec"); G.input.placeholder="Например: за что давали орден Славы?"; rec=null;
-      const v=(final||G.input.value).trim(); if(v){ G.input.value=""; ask(v); } };
-    try{ rec.start(); }catch(e){ mic.classList.remove("rec"); rec=null; }
+    if(location.protocol!=="https:"&&!/^(localhost|127\.)/.test(location.hostname)){ micStatus("Голосовой ввод работает только на сайте с адресом https://."); return; }
+    stopSpeak(); micMsg=null;
+    rec=new SR(); rec.lang="ru-RU"; rec.interimResults=true; rec.continuous=false; rec.maxAlternatives=1;
+    mic.classList.add("rec"); mic.setAttribute("aria-label","Остановить запись"); G.input.placeholder="Подключаю микрофон…";
+    let final="", heard="", failed=false, started=false;
+    const guard=setTimeout(()=>{ if(!started&&rec){ failed=true; rec.abort(); micStatus("Микрофон не включился."+(isYa?" В Яндекс Браузере голосовой ввод часто не работает — откройте сайт в Google Chrome или Microsoft Edge.":" Проверьте разрешение на микрофон (значок замка слева от адреса сайта).")+KEYB); } },6000);
+    rec.onstart=()=>{ started=true; G.input.placeholder="Говорите, я слушаю…"; micStatus("<b>Слушаю…</b> Задайте вопрос вслух, например: «За что давали орден Славы?»"); };
+    rec.onresult=e=>{ const r=e.results[e.results.length-1]; heard=r[0].transcript; if(r.isFinal) final=heard; G.input.value=heard; };
+    rec.onerror=e=>{ if(e.error==="aborted") return; failed=true; micStatus((MIC_ERR[e.error]||("Голосовой ввод не сработал (ошибка: "+esc(e.error)+")."))+KEYB); };
+    rec.onend=()=>{ clearTimeout(guard); micDone();
+      const v=(final||heard||G.input.value).trim();
+      if(v){ if(micMsg&&micMsg.isConnected) micMsg.remove(); G.input.value=""; ask(v); }
+      else if(!failed&&started) micStatus(MIC_ERR["no-speech"]); };
+    try{ rec.start(); }catch(e){ clearTimeout(guard); micDone(); micStatus("Не удалось включить микрофон. Обновите страницу и попробуйте ещё раз."+KEYB); }
   });
 }
 const SUGGEST=["Какая награда самая старая?","За что давали орден Славы?","Что учредили в 1943 году?","Какие модели есть в музее?","Кто получил орден «Победа»?"];
