@@ -298,8 +298,8 @@ dd{margin:0}
 .g-mic.rec{background:var(--enamel);border-color:var(--enamel);color:#fff;animation:gpulse 1s ease-in-out infinite}
 .guide-btn{position:fixed;z-index:6;right:max(16px,calc(env(safe-area-inset-right,0px) + 12px));bottom:max(16px,calc(env(safe-area-inset-bottom,0px) + 12px));
   display:flex;align-items:center;gap:8px;font:700 15px var(--body);color:#fff;background:linear-gradient(135deg,var(--enamel),#8a1620);
-  border:1px solid var(--gold);border-radius:999px;padding:11px 18px 11px 14px;cursor:pointer;box-shadow:0 10px 28px -8px rgba(0,0,0,.7),0 0 0 4px rgba(200,37,47,.18)}
-.guide-btn svg{width:24px;height:24px;color:var(--gold)}
+  border:1px solid var(--gold);border-radius:999px;padding:6px 18px 6px 6px;cursor:pointer;box-shadow:0 10px 28px -8px rgba(0,0,0,.7),0 0 0 4px rgba(200,37,47,.18)}
+.guide-btn .g-face{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);background:#0b1020;flex:none}
 .guide-btn:hover{filter:brightness(1.1)}
 .guide-btn.on{display:none}
 .guide{position:fixed;z-index:7;right:max(16px,calc(env(safe-area-inset-right,0px) + 12px));bottom:max(16px,calc(env(safe-area-inset-bottom,0px) + 12px));
@@ -307,8 +307,9 @@ dd{margin:0}
   background:var(--panel);border:1px solid var(--gold-dim);border-radius:18px;box-shadow:0 24px 60px -12px rgba(0,0,0,.8);overflow:hidden}
 .guide[hidden]{display:none}
 .g-head{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 14px;background:linear-gradient(135deg,var(--enamel),#7a1420);color:#fff}
-.g-ava{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.25);display:grid;place-items:center;color:var(--gold);flex:none}
-.g-ava svg{width:20px;height:20px}
+.g-ava{width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid var(--gold);flex:none;background:#0b1020}
+.g-ava img{width:100%;height:100%;object-fit:cover;display:block}
+.g-hero{display:block;width:100%;height:150px;object-fit:cover;object-position:50% 22%;border-radius:10px;margin-bottom:10px}
 .g-title{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
 .g-title b{font:400 18px var(--display)}
 .g-title small{font-size:12px;opacity:.85}
@@ -340,7 +341,7 @@ dd{margin:0}
 .g-form button svg{width:20px;height:20px}
 @media (max-width:520px){
   .guide{right:0;left:0;bottom:0;width:100%;height:min(88dvh,640px);border-radius:18px 18px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
-  .guide-btn span{display:none}.guide-btn{padding:13px}
+  .guide-btn span{display:none}.guide-btn{padding:4px}.guide-btn .g-face{width:54px;height:54px}
 }
 .x{position:sticky;top:10px;float:right;margin:10px 10px 0 0;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);font-size:20px;cursor:pointer;z-index:2}
 
@@ -356,7 +357,7 @@ dd{margin:0}
   .quiz .q-emb{display:none}
   .search{max-width:none;flex-basis:100%}
 }
-@media (max-width:440px){.opts{grid-template-columns:1fr}.nav a{padding:6px 7px}}
+@media (max-width:440px){.opts{grid-template-columns:1fr}.nav{gap:0;flex-wrap:nowrap}.nav a{padding:6px 5px;font-size:13px;white-space:nowrap}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important;animation:none!important}}
 </style>
 
@@ -431,12 +432,12 @@ dd{margin:0}
 </main>
 
 <button class="guide-btn" id="guideBtn" type="button" aria-controls="guide" aria-expanded="false">
-  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4h0A2.5 2.5 0 0 1 4 13.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><polygon points="12,6.2 13.1,8.6 15.7,8.8 13.7,10.5 14.3,13 12,11.7 9.7,13 10.3,10.5 8.3,8.8 10.9,8.6" fill="currentColor"/></svg>
+  <img class="g-face" src="neurogid.jpg" alt="" width="40" height="40">
   <span>Нейрогид</span>
 </button>
 <section class="guide" id="guide" hidden aria-label="Нейрогид">
   <header class="g-head">
-    <span class="g-ava" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="12,2.5 14.6,8.6 21.2,9 16.2,13.3 17.8,19.8 12,16.3 6.2,19.8 7.8,13.3 2.8,9 9.4,8.6" fill="currentColor"/></svg></span>
+    <span class="g-ava" aria-hidden="true"><img src="neurogid.jpg" alt=""></span>
     <span class="g-title"><b>Нейрогид</b><small>Отвечает по материалам экспозиции</small></span>
     <button class="g-x g-voice" id="gVoice" type="button" aria-pressed="true" aria-label="Читать ответы вслух" title="Читать ответы вслух">
       <svg class="on-i" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -2051,7 +2052,7 @@ let started=false;
 function open(){
   G.panel.hidden=false; G.btn.setAttribute("aria-expanded","true"); G.btn.classList.add("on");
   if(!started){ started=true;
-    add(`Здравствуйте! Я Нейрогид. Расскажу о любой из ${AWARDS.length} наград. Задайте вопрос или выберите один из этих:`+
+    add(`<img class="g-hero" src="neurogid-full.jpg" alt="Нейрогид — робот-экскурсовод в пилотке">Здравствуйте! Я Нейрогид. Расскажу о любой из ${AWARDS.length} наград. Задайте вопрос или выберите один из этих:`+
       `<div class="g-sugg">${SUGGEST.map(s=>`<button type="button" class="g-s">${esc(s)}</button>`).join("")}</div>`,"bot");
     finishBot(G.log.lastElementChild,false); }
   setTimeout(()=>G.input.focus(),50);
