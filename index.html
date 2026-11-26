@@ -201,6 +201,11 @@ dt{color:var(--muted);font-size:13px;padding-top:2px}
 dd{margin:0}
 .fact{background:var(--panel-2);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 14px;margin:0}
 .fact b{display:block;font:700 11px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.our-heroes{margin:0 28px 20px;background:var(--panel-2);border:1px solid var(--gold-dim);border-radius:12px;padding:12px 14px}
+.our-heroes h3{font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.our-heroes p{margin:0;font-size:15px}
+.our-heroes a{color:var(--ink);text-decoration-color:var(--gold-dim)}
+@media (max-width:760px){.our-heroes{margin:0 20px 18px}}
 .more{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:0 28px 24px}
 .more section{min-width:0;border-top:1px solid var(--line);padding-top:12px}
 .more h3{font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
@@ -252,9 +257,16 @@ dd{margin:0}
 .vet.fallen{border-color:#5a5a5a;filter:saturate(.85)}
 .vet.fallen .vet-ph img{filter:grayscale(1)}
 .vet-mem{position:absolute;top:16px;left:10px;z-index:1;font:700 11px var(--body);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(20,20,20,.82);border:1px solid #777;border-radius:999px;padding:3px 9px}
+.vet-aw{margin-top:4px;border-top:1px solid var(--line);padding-top:10px}
+.vet-awl{font:700 11px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.vet-awt{margin:6px 0 0;font-size:14px;color:var(--muted)}
 .vet-dates{font:12px var(--mono);color:var(--muted)}
 @media (max-width:520px){.vet-ph{aspect-ratio:1/1}.vet-ph img{object-position:50% 20%}}
 @media (max-width:760px){html{scroll-padding-top:140px}}
+.vet-ph.nophoto{aspect-ratio:auto;height:96px}
+.vet-ph.nophoto svg{width:auto;height:52px}
+.vet-ph.nophoto + .vet-body{padding-top:10px}
+.vet.flash{box-shadow:0 0 0 3px var(--gold);transition:box-shadow .3s}
 .svo-empty{grid-column:1/-1;display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px dashed var(--gold-dim);border-radius:16px;padding:22px}
 .svo-empty svg{width:56px;height:56px;color:var(--gold);flex:none}
 .svo-empty div{flex:1;min-width:0}
@@ -1443,7 +1455,91 @@ function renderHalls(){
 /* ===== ВЫПУСКНИКИ — УЧАСТНИКИ СВО =====
    name — ФИО, grad — год выпуска, photo — файл фото, awards — id наград из музея (например "rf-courage", "rf-otvaga", "rf-george-cross"),
    story — рассказ (абзацы через \n\n), fallen — true, если погиб, dates — например "1998–2023". */
-const GRADS = [];
+const GRADS = [
+ {
+  "id": "lyzlov",
+  "name": "Лызлов Сергей Сергеевич",
+  "dates": "08.08.1996 — 18.07.2022",
+  "awards": [
+   "rf-courage"
+  ],
+  "story": "Сергей родился в городе Богданович Свердловской области. До 8 класса учился в школе № 6: бегал на «Лыжне России», выступал на школьных концертах, ходил с одноклассниками в походы и на рыбалку, купался в Рефтинском водохранилище.\n\nВ 2011–2013 годах учился в Екатеринбургском кадетском корпусе, а затем окончил Михайловскую военную академию в Санкт-Петербурге по специальности «Специальные радиотехнические системы». Ещё курсантом был старшиной курса и получил опыт руководства людьми.\n\nСлужил в Воздушно-десантных войсках, дослужился до звания гвардии капитана и стал командиром батареи. С 24 февраля 2022 года участвовал в специальной военной операции. Ученики нашей школы писали письма Сергею и его товарищам на фронт.\n\nСергей погиб 18 июля 2022 года, исполняя воинский долг. Награждён орденом Мужества посмертно.",
+  "fallen": true
+ },
+ {
+  "id": "lbov",
+  "name": "Лбов Сергей Васильевич",
+  "dates": "19.07.1995 — 09.02.2023",
+  "awards": [
+   "rf-otvaga"
+  ],
+  "awardsText": "наградной знак «Чёрный крест» ЧВК «Вагнер»",
+  "story": "Сергей родился в городе Чебаркуль Челябинской области. Учился в школе № 15, а в старших классах перешёл в школу № 6. Занимался спортом, увлекался туризмом, выступал на концертах и конкурсах.\n\nПосле школы окончил Асбестовское училище по специальностям автомеханика и сварщика. Он был талантливым, целеустремлённым человеком с активной жизненной позицией, прекрасным сыном, любящим братом и отцом.\n\nОсенью 2022 года Сергей решил отправиться защищать Родину. Он не был опытным военным, но отважно выполнял все поставленные боевые задачи.\n\nСергей погиб 9 февраля 2023 года у города Артёмовска в Донецкой Народной Республике. Похоронен в посёлке Рефтинский.",
+  "fallen": true
+ },
+ {
+  "id": "terenin",
+  "name": "Теренин Евгений Юрьевич",
+  "dates": "03.10.1983 — 25.06.2024",
+  "awards": [],
+  "story": "Евгений родился в городе Верхний Уфалей Челябинской области. Когда ему было три года, семья переехала в Рефтинский. В первый класс Женя пошёл в школу № 6, где его мама работала учителем начальных классов. Он рос открытым, добрым, весёлым и любознательным, был заботливым старшим братом.\n\nПосле 9 класса окончил Асбестовское училище № 48 по специальности газоэлектросварщика. В армии Евгений не служил, но оставался настоящим патриотом.\n\nВ апреле 2024 года он заключил контракт и отправился в зону боевых действий. С первых дней показал себя смелым и надёжным бойцом и вскоре стал командиром отделения штурмового взвода.\n\nЕвгений погиб 25 июня 2024 года при выполнении боевых задач. Похоронен в посёлке Рефтинский.",
+  "fallen": true
+ },
+ {
+  "id": "dolmatov",
+  "name": "Долматов Денис Евгеньевич",
+  "grad": 1994,
+  "dates": "13.11.1978 — 18.09.2024",
+  "awards": [
+   "rf-courage"
+  ],
+  "story": "Денис родился в Байкаловском районе, а в 1980 году его семья переехала в Рефтинский. В 1994 году он окончил школу № 6, затем Асбестовское училище № 17 по специальности «столяр-станочник» и работал по профессии.\n\nДенис любил бег на лыжах и теннис. Он был добрым, отзывчивым, всегда готовым прийти на помощь, а самые сложные решения принимал сам.\n\n9 августа 2024 года Денис решил отправиться защищать Родину. Он погиб 18 сентября 2024 года в Донецкой Народной Республике, исполняя воинский долг. Награждён орденом Мужества посмертно.",
+  "fallen": true
+ },
+ {
+  "id": "esaulkov",
+  "name": "Есаулков Максим Юрьевич",
+  "dates": "16.07.1998 — 31.10.2024",
+  "awards": [
+   "rf-courage"
+  ],
+  "story": "Максим родился в посёлке Рефтинский в многодетной семье и учился в школе № 6. С детства увлекался спортом: после 8 класса поступил в Училище олимпийского резерва в Екатеринбурге на отделение биатлона и стал кандидатом в мастера спорта.\n\nВ 2017 году был призван в армию, служил в мотострелковых войсках и остался служить по контракту. Вернувшись домой, работал на Рефтинской птицефабрике и учился заочно на юриста. В 2022 году был мобилизован, а после рождения первенца вернулся домой и в 2024 году получил диплом о высшем образовании.\n\nВ октябре 2024 года Максим снова заключил контракт и отправился в зону СВО. Он никогда не отступал перед трудностями. Максим погиб 31 октября 2024 года в Донецкой Народной Республике. Награждён орденом Мужества посмертно.",
+  "fallen": true
+ },
+ {
+  "id": "ryazanov",
+  "name": "Рязанов Александр Сергеевич",
+  "dates": "23.11.1995 — 01.12.2024",
+  "awards": [
+   "rf-courage"
+  ],
+  "awardsText": "медаль за боевые заслуги (посмертно)",
+  "story": "Александр с рождения жил в посёлке Рефтинский и учился в школе № 6. С детства увлекался музыкой и занимался в музыкальной школе по классу аккордеона.\n\nПосле 9 класса окончил Асбестовское профессиональное училище по специальности «слесарь-ремонтник» и выучился на водителя. Затем учился в университете, а потом в Московском технологическом институте на инженера по технике безопасности.\n\nВ сентябре 2024 года, когда до диплома оставалось совсем немного, Александр подписал контракт и отправился в зону боевых действий. Он был смелым и отважным бойцом, неоднократно был ранен. Жизнерадостный и свободолюбивый, он строил планы на жизнь после контракта.\n\nАлександр погиб 1 декабря 2024 года в Донецкой Народной Республике при выполнении боевых задач. Награждён орденом Мужества посмертно.",
+  "fallen": true
+ },
+ {
+  "id": "sokolov",
+  "name": "Соколов Михаил Сергеевич",
+  "dates": "28.07.1984 — 24.11.2025",
+  "awards": [
+   "rf-george-cross"
+  ],
+  "awardsText": "IV степени; медаль «За боевые отличия», медаль «За отличие в специальной военной операции», наградной нож «За отвагу»",
+  "story": "Михаил родился в посёлке Рефтинский в многодетной семье, здесь прошли его детство и юность. Учился в школе № 6, затем окончил Асбестовское училище по специальности «слесарь».\n\nВ 2002 году был призван в армию и служил механиком-водителем танка. После службы вернулся в посёлок, работал на комбинате «Ураласбест» составителем поездов, а с 2021 года — машинистом на Рефтинской ГРЭС.\n\nВ сентябре 2022 года Михаил одним из первых отправился в зону СВО. Служил в танковых войсках, получил звание младшего сержанта и стал командиром танка. В 2023 году награждён Георгиевским крестом IV степени.\n\nМихаил погиб 24 ноября 2025 года в Донецкой Народной Республике при выполнении боевых задач.",
+  "fallen": true
+ },
+ {
+  "id": "badrtdinov",
+  "name": "Бадртдинов Александр Олегович",
+  "dates": "05.01.1996 — 05.12.2025",
+  "awards": [
+   "rf-courage"
+  ],
+  "awardsText": "медаль «За храбрость» II степени, медаль «За боевые отличия», медаль «За укрепление боевого содружества», медаль «Участнику СВО», медаль «5 лет военной службы»",
+  "story": "Саша родился в посёлке Рефтинский в многодетной семье. Он рос увлечённым, разносторонним и общительным. После 9 класса окончил училище № 17 в Асбесте по специальности «сварщик».\n\nВ 2014 году был призван в армию, служил на Курильских островах, на острове Кунашир, в инженерных войсках и остался служить по контракту.\n\nС сентября 2022 года участвовал в специальной военной операции механиком-водителем. Был ранен, но после лечения вернулся в строй. Участвовал в освобождении Курской области, где принял командование отделением, а затем взводом.\n\nАлександр погиб 5 декабря 2025 года в Днепропетровской области во время наступления своего подразделения. Награждён орденом Мужества посмертно.",
+  "fallen": true
+ }
+];
 const PERSON_ICON='<svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 20.5c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
 function renderGrads(){
   const el=document.getElementById("svoGrid"), e=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -1453,14 +1549,14 @@ function renderGrads(){
     const aw=(g.awards||[]).map(id=>byId[id]).filter(Boolean);
     return `<article class="vet${g.fallen?" fallen":""}" id="vet-${e(g.id)}">
       ${g.fallen?`<span class="vet-mem">Вечная память</span>`:""}
-      <div class="vet-ph">${g.photo?`<img src="${e(g.photo)}" alt="${e(g.name)}" loading="lazy">`:PERSON_ICON}</div>
+      <div class="vet-ph${g.photo?"":" nophoto"}">${g.photo?`<img src="${e(g.photo)}" alt="${e(g.name)}" loading="lazy">`:PERSON_ICON}</div>
       <div class="vet-body">
-        <span class="vet-yr">${g.grad?`Выпуск ${e(g.grad)} года`:"Выпускник школы"}</span>
+        <span class="vet-yr">${g.grad?`Выпуск ${e(g.grad)} года`:"Учился в школе № 6"}</span>
         <h3>${e(g.name)}</h3>
         ${g.dates?`<span class="vet-dates">${e(g.dates)}</span>`:""}
         ${first?`<p class="vet-st">${e(first)}</p>`:""}
         ${rest.length?`<details><summary>Читать полностью</summary>${rest.map(p=>`<p>${e(p)}</p>`).join("")}</details>`:""}
-        ${aw.length?`<div class="g-chips">${aw.map(a=>`<button type="button" class="g-chip" data-open="${a.id}">${e(a.name)}</button>`).join("")}</div>`:(g.awardsText?`<p class="vet-st">Награды: ${e(g.awardsText)}</p>`:"")}
+        ${aw.length||g.awardsText?`<div class="vet-aw"><span class="vet-awl">Награды</span>${aw.length?`<div class="g-chips">${aw.map(a=>`<button type="button" class="g-chip" data-open="${a.id}">${e(a.name)}</button>`).join("")}</div>`:""}${g.awardsText?`<p class="vet-awt">${e(g.awardsText)}</p>`:""}</div>`:""}
       </div></article>`;
   }).join("");
 }
@@ -1510,6 +1606,7 @@ function openAward(id){
         ${a.audio?`<div class="tour"><button type="button" class="tour-btn" data-audio="${a.audio}"><span class="tour-ic"><svg class="pl" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24"><path d="M7.5 5h3v14h-3zM13.5 5h3v14h-3z" fill="currentColor"/></svg></span><span class="tour-tx"><b>Рассказ экскурсовода</b><small class="tour-time">аудио</small></span></button><div class="tour-bar" role="presentation"><i></i></div></div>`:""}
       </div>
     </div>
+    ${(()=>{ const gs=(typeof GRADS!=="undefined"?GRADS:[]).filter(g=>(g.awards||[]).includes(a.id)); return gs.length?`<div class="our-heroes"><h3>Кавалеры из нашей школы</h3><p>${gs.map(g=>`<a href="#vet-${g.id}" data-vet>${g.name}</a>`).join(", ")}</p></div>`:""; })()}
     <div class="more">
       ${a.look?`<section><h3>Как выглядит</h3><p>${a.look}</p></section>`:""}
       ${a.people?`<section><h3>Кавалеры</h3><p>${a.people}</p></section>`:""}
@@ -1527,7 +1624,8 @@ function openAward(id){
 }
 function closeDlg(){ stopRec(); dlg.close(); try{history.replaceState(null,"",location.pathname+location.search);}catch(e){} }
 document.getElementById("dClose").addEventListener("click",closeDlg);
-dlg.addEventListener("click",e=>{ if(e.target===dlg) closeDlg(); });
+dlg.addEventListener("click",e=>{ if(e.target===dlg) closeDlg();
+  const v=e.target.closest("[data-vet]"); if(v){ e.preventDefault(); const id=v.getAttribute("href").slice(1); closeDlg(); setTimeout(()=>{ const el=document.getElementById(id); if(el){ el.scrollIntoView({behavior:"smooth",block:"center"}); el.classList.add("flash"); setTimeout(()=>el.classList.remove("flash"),1800);} },60); } });
 dlg.addEventListener("cancel",e=>{ e.preventDefault(); closeDlg(); });
 document.addEventListener("click",e=>{ const b=e.target.closest("[data-open]"); if(b){ e.preventDefault(); openAward(b.dataset.open);} });
 document.getElementById("randomBtn").addEventListener("click",()=>{
@@ -1794,13 +1892,14 @@ function answerSearch(q,era){
 const HELP=`Я Нейрогид Музея воинской славы. Отвечаю по материалам всех ${AWARDS.length} экспонатов. Можно спросить, например:
 <ul class="g-list"><li>За что давали орден Славы?</li><li>Какая награда самая старая?</li><li>Что учредили в 1943 году?</li><li>Кто получил орден «Победа»?</li><li>Из чего сделан орден Ленина?</li><li>Какие модели есть в музее?</li></ul>`;
 
+function surnameHit(g,q){ const sn=stem(norm(g.name).split(" ")[0]); return tokens(q).some(w=>w.length>=4&&same(stem(w),sn)); }
 function reply(raw){
   const q=norm(raw); if(!q) return HELP;
   if(/^(привет|здравств|добр(ый|ое|ого) (день|утро|вечер)|хай|салют)/.test(q)) return "Здравствуйте! "+HELP;
   if(/^(спасибо|благодар|спс|понятно|ясно|ок|хорошо)/.test(q)) return "Пожалуйста! Спрашивайте ещё — расскажу о любой награде музея.";
   if(/(кто ты|что ты умеешь|помощ|помоги|что можно спросить|как пользоват)/.test(q)) return HELP;
-  if(/выпускник|(^| )сво( |$)|спецоперац|специальн\S* военн|наши герои|земляк/.test(q)||GRADS.some(g=>stems(g.name).some(n=>stems(q).some(x=>x.length>=5&&same(n,x))))){
-    const hit=GRADS.filter(g=>stems(g.name).some(n=>stems(q).some(x=>x.length>=5&&same(n,x))));
+  if(/выпускник|(^| )сво( |$)|спецоперац|специальн\S* военн|наши герои|земляк/.test(q)||GRADS.some(g=>surnameHit(g,q))){
+    const hit=GRADS.filter(g=>surnameHit(g,q));
     const list=hit.length?hit:GRADS;
     if(!list.length) return `Раздел о выпускниках школы — участниках СВО сейчас готовится. <a href="#svo" class="g-link" data-close>Перейти к разделу</a>`;
     if(hit.length===1){ const g=hit[0]; return `<b>${esc(g.name)}</b>${g.grad?`, выпускник ${esc(g.grad)} года`:""}${g.fallen?" (погиб, вечная память)":""}. ${esc(String(g.story||"").split(/\n\n+/)[0]||"")} <a href="#vet-${esc(g.id)}" class="g-link" data-close>Открыть в разделе</a>`; }
