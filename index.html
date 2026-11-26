@@ -234,6 +234,32 @@ dd{margin:0}
 .lb-btn:hover{border-color:#d8ac56}
 .lb-btn[hidden]{display:none}
 .lb-x{position:absolute;top:max(10px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px))}
+/* выпускники — участники СВО */
+.svo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.vet{position:relative;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;min-width:0}
+.vet::before{content:"";height:6px;background:repeating-linear-gradient(90deg,#1b1b1b 0 20%,#e58a1f 20% 40%)}
+.vet-ph{aspect-ratio:4/5;max-width:100%;background:radial-gradient(ellipse at 50% 35%,var(--panel-2),var(--panel) 75%);display:grid;place-items:center;overflow:hidden}
+.vet-ph img{width:100%;height:100%;object-fit:cover;display:block}
+.vet-ph svg{width:38%;height:auto;color:var(--gold-dim)}
+.vet-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.vet-yr{font:12px var(--mono);color:var(--gold)}
+.vet h3{font-size:20px;line-height:1.2}
+.vet-st{margin:0;color:var(--ink);font-size:15px}
+.vet details{color:var(--ink);font-size:15px}
+.vet summary{cursor:pointer;color:var(--gold);font-weight:700;font-size:14px;margin-top:2px}
+.vet details p{margin:8px 0 0}
+.vet .g-chips{margin-top:4px}
+.vet.fallen{border-color:#5a5a5a;filter:saturate(.85)}
+.vet.fallen .vet-ph img{filter:grayscale(1)}
+.vet-mem{position:absolute;top:16px;left:10px;z-index:1;font:700 11px var(--body);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(20,20,20,.82);border:1px solid #777;border-radius:999px;padding:3px 9px}
+.vet-dates{font:12px var(--mono);color:var(--muted)}
+@media (max-width:520px){.vet-ph{aspect-ratio:1/1}.vet-ph img{object-position:50% 20%}}
+@media (max-width:760px){html{scroll-padding-top:140px}}
+.svo-empty{grid-column:1/-1;display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px dashed var(--gold-dim);border-radius:16px;padding:22px}
+.svo-empty svg{width:56px;height:56px;color:var(--gold);flex:none}
+.svo-empty div{flex:1;min-width:0}
+.svo-empty b{display:block;font:400 20px var(--display);margin-bottom:4px}
+.svo-empty p{margin:0;color:var(--muted);max-width:60ch}
 /* рассказ экскурсовода */
 .tour{margin-top:14px;background:var(--panel-2);border:1px solid var(--gold-dim);border-radius:14px;padding:10px 12px 12px}
 .tour-btn{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;padding:0;color:var(--ink);cursor:pointer;text-align:left;font:inherit}
@@ -336,6 +362,7 @@ dd{margin:0}
     <nav class="nav" aria-label="Разделы">
       <a href="#halls">Залы</a>
       <a href="#timeline">Хронология</a>
+      <a href="#svo">Выпускники</a>
       <a href="#quiz">Викторина</a>
     </nav>
     <div class="progress" aria-live="polite"><span id="progTxt">Осмотрено 0</span><span class="bar"><i id="progBar"></i></span></div>
@@ -375,6 +402,13 @@ dd{margin:0}
     <h2 id="tlTitle">Как появлялись награды</h2>
     <p class="lead"><span id="tlLead"></span> Лента прокручивается вбок.</p>
     <div class="tl"><ol id="tl"></ol></div>
+  </section>
+
+  <section class="section svo" id="svo">
+    <span class="eyebrow">Наши выпускники</span>
+    <h2>Выпускники школы&nbsp;— участники СВО</h2>
+    <p class="lead">Выпускники школы № 6 посёлка Рефтинский, которые участвуют или участвовали в специальной военной операции. Мы гордимся ими и храним память о тех, кто не вернулся.</p>
+    <div class="svo-grid" id="svoGrid"></div>
   </section>
 
   <section class="section" id="quiz">
@@ -1406,6 +1440,31 @@ function renderHalls(){
   document.getElementById("hallList").innerHTML=total?out.join(""):`<p class="empty">По запросу «${query.replace(/[<>&"]/g,"")}» ничего не нашлось. Попробуйте фамилию полководца, год или металл.</p>`;
 }
 
+/* ===== ВЫПУСКНИКИ — УЧАСТНИКИ СВО =====
+   name — ФИО, grad — год выпуска, photo — файл фото, awards — id наград из музея (например "rf-courage", "rf-otvaga", "rf-george-cross"),
+   story — рассказ (абзацы через \n\n), fallen — true, если погиб, dates — например "1998–2023". */
+const GRADS = [];
+const PERSON_ICON='<svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 20.5c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+function renderGrads(){
+  const el=document.getElementById("svoGrid"), e=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  if(!GRADS.length){ el.innerHTML=`<div class="svo-empty"><svg viewBox="0 0 24 24"><polygon points="12,2.5 14.6,8.6 21.2,9 16.2,13.3 17.8,19.8 12,16.3 6.2,19.8 7.8,13.3 2.8,9 9.4,8.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><div><b>Раздел готовится</b><p>Скоро здесь появятся рассказы о выпускниках нашей школы. Если вы знаете выпускника, чья история должна быть в музее, сообщите об этом в школу.</p></div></div>`; return; }
+  el.innerHTML=GRADS.map(g=>{
+    const paras=String(g.story||"").split(/\n\n+/).filter(Boolean), first=paras[0]||"", rest=paras.slice(1);
+    const aw=(g.awards||[]).map(id=>byId[id]).filter(Boolean);
+    return `<article class="vet${g.fallen?" fallen":""}" id="vet-${e(g.id)}">
+      ${g.fallen?`<span class="vet-mem">Вечная память</span>`:""}
+      <div class="vet-ph">${g.photo?`<img src="${e(g.photo)}" alt="${e(g.name)}" loading="lazy">`:PERSON_ICON}</div>
+      <div class="vet-body">
+        <span class="vet-yr">${g.grad?`Выпуск ${e(g.grad)} года`:"Выпускник школы"}</span>
+        <h3>${e(g.name)}</h3>
+        ${g.dates?`<span class="vet-dates">${e(g.dates)}</span>`:""}
+        ${first?`<p class="vet-st">${e(first)}</p>`:""}
+        ${rest.length?`<details><summary>Читать полностью</summary>${rest.map(p=>`<p>${e(p)}</p>`).join("")}</details>`:""}
+        ${aw.length?`<div class="g-chips">${aw.map(a=>`<button type="button" class="g-chip" data-open="${a.id}">${e(a.name)}</button>`).join("")}</div>`:(g.awardsText?`<p class="vet-st">Награды: ${e(g.awardsText)}</p>`:"")}
+      </div></article>`;
+  }).join("");
+}
+
 /* ===== ХРОНОЛОГИЯ ===== */
 function renderTimeline(){
   const E=ERAS.find(e=>e.id===era);
@@ -1740,6 +1799,13 @@ function reply(raw){
   if(/^(привет|здравств|добр(ый|ое|ого) (день|утро|вечер)|хай|салют)/.test(q)) return "Здравствуйте! "+HELP;
   if(/^(спасибо|благодар|спс|понятно|ясно|ок|хорошо)/.test(q)) return "Пожалуйста! Спрашивайте ещё — расскажу о любой награде музея.";
   if(/(кто ты|что ты умеешь|помощ|помоги|что можно спросить|как пользоват)/.test(q)) return HELP;
+  if(/выпускник|(^| )сво( |$)|спецоперац|специальн\S* военн|наши герои|земляк/.test(q)||GRADS.some(g=>stems(g.name).some(n=>stems(q).some(x=>x.length>=5&&same(n,x))))){
+    const hit=GRADS.filter(g=>stems(g.name).some(n=>stems(q).some(x=>x.length>=5&&same(n,x))));
+    const list=hit.length?hit:GRADS;
+    if(!list.length) return `Раздел о выпускниках школы — участниках СВО сейчас готовится. <a href="#svo" class="g-link" data-close>Перейти к разделу</a>`;
+    if(hit.length===1){ const g=hit[0]; return `<b>${esc(g.name)}</b>${g.grad?`, выпускник ${esc(g.grad)} года`:""}${g.fallen?" (погиб, вечная память)":""}. ${esc(String(g.story||"").split(/\n\n+/)[0]||"")} <a href="#vet-${esc(g.id)}" class="g-link" data-close>Открыть в разделе</a>`; }
+    return `В разделе «Выпускники школы — участники СВО» ${list.length} ${list.length===1?"рассказ":list.length<5?"рассказа":"рассказов"}:<ul class="g-list">${list.map(g=>`<li>${esc(g.name)}${g.grad?`, выпуск ${esc(g.grad)}`:""}</li>`).join("")}</ul><a href="#svo" class="g-link" data-close>Перейти к разделу</a>`;
+  }
   if(/викторин|тест|проверить себя/.test(q)) return `Викторина — в конце страницы: восемь вопросов, а в конце вы получите воинское звание. <a href="#quiz" class="g-link" data-close>Перейти к викторине</a>`;
   const era=detectEra(q), kind=detectKind(q);
   if(/сам(ая|ый|ое|ые|ых)|старейш|больше всего|меньше всего|чаще всего|реже всего|какой был перв|какая была перв|первый орден|первая медаль|первая наград/.test(q)){
@@ -1869,7 +1935,7 @@ G.panel.addEventListener("keydown",e=>{ if(e.key==="Escape") close(); });
 window.museumGuideReply=reply;
 })();
 
-document.body.dataset.era=era; renderEras(); renderChips(); renderHalls(); renderTimeline(); updateProgress(); quizStart(); fromHash();
+renderGrads(); document.body.dataset.era=era; renderEras(); renderChips(); renderHalls(); renderTimeline(); updateProgress(); quizStart(); fromHash();
 </script>
 
 </body>
