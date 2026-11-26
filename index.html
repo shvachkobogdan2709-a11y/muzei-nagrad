@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="icon" href="logo.png">
+<link rel="icon" href="favicon.png">
 <title>Музей воинской славы</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -374,9 +374,11 @@ h1,h2,h3{font-weight:600}
 .top{background:rgba(12,12,15,.86);border-bottom:1px solid var(--line)}
 .top .wrap{flex-wrap:nowrap;gap:20px;padding-block:12px}
 .brand{gap:12px}
+.emblem{width:58px;height:58px;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))}
+@media (max-width:440px){.emblem{width:46px;height:46px}}
 .brand-t{display:flex;flex-direction:column;line-height:1.15}
-.brand-t b{font:600 21px var(--display);color:var(--ink)}
-.brand-t small{font:12.5px var(--body);color:var(--muted)}
+.brand-t b{font:600 22px var(--display);color:var(--ink);padding-bottom:3px;border-bottom:1px solid rgba(201,164,106,.55)}
+.brand-t small{font:500 13.5px var(--display);color:#d9cdb8;padding-top:3px;letter-spacing:.02em}
 .logo-plate{border-radius:8px;box-shadow:0 0 0 1px rgba(154,29,34,.6)}
 .nav{flex-wrap:nowrap;gap:2px;align-items:center}
 .nav a,.nav-link{font:500 14px var(--body);color:var(--ink);opacity:.82;padding:10px 12px;border-radius:0;background:none;border:0;cursor:pointer;position:relative;white-space:nowrap;text-decoration:none}
@@ -483,7 +485,7 @@ dialog{border-radius:12px;background:#16161b}
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#start">
-      <span class="logo-plate"><img src="logo.png" alt="Школа № 6, Рефтинский"></span>
+      <img class="emblem" src="emblem.png" alt="" width="58" height="58">
       <span class="brand-t"><b>Музей воинской славы</b><small>Школа № 6, пгт Рефтинский</small></span>
     </a>
     <nav class="nav" aria-label="Разделы">
