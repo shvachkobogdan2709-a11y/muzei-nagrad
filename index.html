@@ -440,7 +440,21 @@ h1,h2,h3{font-weight:600}
 .qk-guide div{flex:1;display:flex;flex-direction:column;gap:4px;padding:18px;position:relative;z-index:1}
 .qk-guide b{font:600 26px var(--display);color:var(--ink)}
 .qk-guide span{color:#c3c8d4;font-size:14px;max-width:16ch}
-.qk-guide img{width:42%;object-fit:cover;object-position:52% 26%;-webkit-mask:linear-gradient(90deg,transparent,#000 30%);mask:linear-gradient(90deg,transparent,#000 30%)}
+.qg-bot{position:relative;width:42%;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 30%);mask:linear-gradient(90deg,transparent,#000 30%)}
+.qg-bot img{position:absolute;inset:0 -4% -8%;width:108%;height:108%;object-fit:cover;object-position:52% 8%;animation:qgFloat 5s ease-in-out infinite;transform-origin:50% 80%}
+.qg-scan{position:absolute;left:0;right:0;top:-30%;height:30%;background:linear-gradient(180deg,transparent,rgba(110,180,255,.28) 55%,rgba(170,215,255,.55) 60%,transparent 62%);mix-blend-mode:screen;animation:qgScan 4.5s linear infinite}
+.qk-guide{animation:qgGlow 3.2s ease-in-out infinite}
+.qk-guide::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 75% 35%,rgba(90,160,255,.22),transparent 45%);animation:qgEyes 6s ease-in-out infinite;z-index:1}
+.qg-bubble{position:absolute;z-index:3;right:12px;bottom:12px;max-width:58%;font:500 12.5px/1.3 var(--body);color:#0e1220;background:#EAF3FF;border-radius:12px 2px 12px 12px;padding:6px 10px;box-shadow:0 6px 18px -6px rgba(80,150,255,.7);opacity:0;transform:translateY(6px) scale(.96);transition:opacity .35s,transform .35s}
+.qg-bubble.show{opacity:1;transform:none}
+.btn-o{position:relative;overflow:hidden}
+.btn-o::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(240,215,160,.35),transparent);animation:qgShine 3.8s ease-in-out infinite 1s}
+@keyframes qgFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3.5%) rotate(-1.2deg)}}
+@keyframes qgScan{0%{top:-30%}60%,100%{top:110%}}
+@keyframes qgGlow{0%,100%{box-shadow:0 0 24px -10px rgba(80,150,255,.45);border-color:rgba(80,150,255,.4)}50%{box-shadow:0 0 38px -6px rgba(80,150,255,.75);border-color:rgba(120,180,255,.8)}}
+@keyframes qgEyes{0%,44%,52%,100%{opacity:.5}48%{opacity:0}}
+@keyframes qgShine{0%{left:-60%}35%,100%{left:130%}}
+@media (prefers-reduced-motion:reduce){.qg-bot img,.qg-scan,.qk-guide,.qk-guide::before,.btn-o::after{animation:none}.qg-scan{display:none}}
 .btn-o{align-self:flex-start;margin-top:auto;font:500 13.5px var(--body);color:var(--gold);background:transparent;border:1px solid var(--gold);border-radius:8px;padding:8px 12px;cursor:pointer}
 .btn-o:hover{background:rgba(201,164,106,.12)}
 @media (max-width:1050px){.quick{grid-template-columns:repeat(2,1fr)}.qk-guide{grid-column:1/-1;margin-top:0}}
@@ -546,7 +560,8 @@ dialog{border-radius:12px;background:#16161b}
     <a class="qk" href="#quiz" style="--img:url(tile-3.jpg)"><svg viewBox="0 0 24 24"><path d="M4 5.5C6.5 4.3 9.5 4.3 12 6c2.5-1.7 5.5-1.7 8-.5V19c-2.5-1.2-5.5-1.2-8 .5-2.5-1.7-5.5-1.7-8-.5z M12 6v13.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><b>Викторина<br>«Проверь себя»</b><i>→</i></a>
     <div class="qk-guide">
       <div><b>Нейрогид</b><span>Ваш цифровой экскурсовод</span><button type="button" class="btn-o" id="heroGuide">Начать экскурсию →</button></div>
-      <img src="neurogid-full.jpg" alt="Нейрогид — робот-экскурсовод в пилотке">
+      <div class="qg-bot"><img src="neurogid-full.jpg" alt="Нейрогид — робот-экскурсовод в пилотке"><i class="qg-scan" aria-hidden="true"></i></div>
+      <span class="qg-bubble" id="qgBubble" aria-hidden="true">Здравствуйте!</span>
     </div>
   </section>
 
@@ -3569,6 +3584,12 @@ document.getElementById("navGuide").addEventListener("click",()=>document.getEle
 document.getElementById("heroGuide").addEventListener("click",()=>document.getElementById("guideBtn").click());
 document.getElementById("navSearch").addEventListener("click",()=>{ document.getElementById("halls").scrollIntoView({behavior:"smooth"}); setTimeout(()=>document.getElementById("q").focus({preventScroll:true}),400); });
 document.querySelectorAll(".ex[data-era]").forEach(b=>b.addEventListener("click",()=>{ setEra(b.dataset.era); document.getElementById("halls").scrollIntoView({behavior:"smooth"}); }));
+/* реплики Нейрогида в карточке на входе */
+(function(){ const b=document.getElementById("qgBubble"); if(!b) return;
+  const L=["Здравствуйте!","Спросите меня о любой награде","За что давали орден Славы?","Какая награда самая старая?","Я могу говорить вслух","Нажмите «Начать экскурсию»"];
+  let i=0; const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function tick(){ b.classList.remove("show"); setTimeout(()=>{ b.textContent=L[i++%L.length]; b.classList.add("show"); },reduce?0:380); }
+  tick(); if(!reduce) setInterval(tick,3600); else b.classList.add("show"); })();
 /* плавающая кнопка Нейрогида прячется, пока на экране его карточка на входе */
 (function(){ const c=document.querySelector(".qk-guide"), b=document.getElementById("guideBtn"); if(!c||!("IntersectionObserver" in window)) return;
   new IntersectionObserver(es=>es.forEach(e=>b.classList.toggle("away",e.isIntersecting))).observe(c); })();
