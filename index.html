@@ -286,6 +286,45 @@ dd{margin:0}
 .g-rec{display:inline-flex;align-items:center;gap:6px;margin:8px 6px 0 0;font:600 12px var(--body);color:#22140a;background:var(--gold);border:0;border-radius:999px;padding:5px 11px 5px 8px;cursor:pointer}
 .g-rec svg{width:15px;height:15px}
 .g-rec.playing{animation:gpulse 1.2s ease-in-out infinite}
+/* личный маршрут */
+.route{display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;margin-top:28px;padding:22px 24px;background:linear-gradient(135deg,rgba(154,29,34,.14),transparent 55%),var(--panel);border:1px solid var(--line);border-radius:12px}
+.rt-ring{position:relative;width:112px;height:112px;flex:none}
+.rt-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.rt-bg{fill:none;stroke:var(--panel-2);stroke-width:9}
+.rt-fg{fill:none;stroke:var(--gold);stroke-width:9;stroke-linecap:round;stroke-dasharray:326.7;stroke-dashoffset:326.7;transition:stroke-dashoffset .8s ease}
+.rt-ring b{position:absolute;inset:0;display:grid;place-items:center;font:600 30px var(--display);color:var(--ink)}
+.rt-main{min-width:0}
+.rt-main h2{font:600 clamp(24px,3vw,32px) var(--display);margin:6px 0 4px}
+.rt-txt{margin:0 0 10px;color:#cfc7ba;max-width:60ch}
+.rt-txt b{color:var(--ink)}
+.rt-eras{display:flex;gap:14px;flex-wrap:wrap}
+.rt-era{display:flex;flex-direction:column;gap:4px;min-width:150px;flex:1;max-width:220px}
+.rt-era span{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.rt-era i{display:block;height:4px;border-radius:2px;background:var(--panel-2);overflow:hidden}
+.rt-era i em{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--enamel),var(--gold));transition:width .6s}
+.rt-acts{display:flex;flex-direction:column;gap:8px;align-items:stretch;min-width:210px}
+.rt-acts .btn,.rt-acts .btn-o{justify-content:center;text-align:center;align-self:stretch;margin:0}
+.rt-confirm[hidden]{display:none}
+.rt-confirm{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+@media (max-width:860px){.route{grid-template-columns:auto 1fr}.rt-acts{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}.rt-acts .btn,.rt-acts .btn-o{flex:1 1 200px}}
+@media (max-width:480px){.route{grid-template-columns:1fr;justify-items:start;padding:18px}.rt-ring{width:92px;height:92px}.rt-ring b{font-size:24px}}
+/* режимы Нейрогида */
+.g-modes{display:flex;gap:6px;padding:10px 12px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);background:var(--panel)}
+.g-modes::-webkit-scrollbar{display:none}
+.g-mode{flex:none;font:500 12.5px var(--body);color:var(--ink);background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:6px 11px;cursor:pointer;white-space:nowrap}
+.g-mode[aria-pressed="true"]{background:var(--enamel);border-color:#c4454b;color:#fff}
+.g-sec{margin:8px 0 0}
+.g-sec b.k{display:block;font:600 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.g-ref{width:100%;border-collapse:collapse;margin-top:6px;font-size:14px}
+.g-ref th{text-align:left;vertical-align:top;color:var(--muted);font-weight:500;padding:4px 10px 4px 0;white-space:nowrap}
+.g-ref td{padding:4px 0}
+.g-ref tr+tr th,.g-ref tr+tr td{border-top:1px solid var(--line)}
+.g-src{margin:10px 0 0;padding-top:8px;border-top:1px dashed var(--line);font-size:12px;color:var(--muted)}
+.g-src::before{content:"✓ ";color:var(--gold)}
+.g-nav{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.g-nav button{font:600 13px var(--body);border-radius:8px;padding:7px 12px;cursor:pointer;border:1px solid var(--gold-dim);background:transparent;color:var(--gold)}
+.g-nav button.pri{background:var(--gold);border-color:var(--gold);color:#22140a}
+.g-step-h{display:block;font:500 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 /* QR-коды */
 .nav-qr{margin-left:auto}
 @media (max-width:980px){.nav-qr{margin-left:auto}.nav-qr + .nav-search{margin-left:0}}
@@ -406,7 +445,7 @@ h1,h2,h3{font-weight:600}
 .nav-search:hover{border-color:var(--gold)}
 .progress{display:none}
 @media (max-width:980px){.top .wrap{flex-wrap:wrap}.nav{order:3;width:100%;margin:0;overflow-x:auto;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav-search{margin-left:auto}}
-@media (max-width:440px){.brand-t b{font-size:18px}.brand-t small{font-size:11.5px}.nav a,.nav-link{font-size:13px;padding:8px 9px}.nav a.on::after{left:9px;right:9px}}
+@media (max-width:440px){.top .wrap{gap:8px}.nav-search{width:36px;height:36px}.nav-search svg{width:17px;height:17px}.emblem{width:42px;height:42px}.brand{gap:8px;min-width:0}.brand-t{min-width:0}.brand-t b{font-size:17px}.brand-t small{font-size:11.5px}.nav a,.nav-link{font-size:13px;padding:8px 9px}.nav a.on::after{left:9px;right:9px}}
 /* вход */
 .hero{display:block;position:relative;overflow:visible;padding-block:60px 84px;min-height:560px;isolation:isolate}
 .hero-bg{position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);overflow:hidden;background:#0d0d10}
@@ -507,6 +546,8 @@ dialog{border-radius:12px;background:#16161b}
 .tour-tx b{font:600 19px var(--display)}
 .guide-btn{background:linear-gradient(135deg,#a3222a,#6E1216)}
 .g-head{background:linear-gradient(135deg,#a3222a,#4A0E12)}
+@media (max-width:440px){.brand-t small{font-size:11.5px}.brand-t b{font-size:17px}}
+@media (max-width:370px){.brand-t b{font-size:15.5px}.brand-t small{font-size:10.5px}}
 </style>
 
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
@@ -562,6 +603,22 @@ dialog{border-radius:12px;background:#16161b}
       <div><b>Нейрогид</b><span>Ваш цифровой экскурсовод</span><button type="button" class="btn-o" id="heroGuide">Начать экскурсию →</button></div>
       <div class="qg-bot"><img src="neurogid-full.jpg" alt="Нейрогид — робот-экскурсовод в пилотке"><i class="qg-scan" aria-hidden="true"></i></div>
       <span class="qg-bubble" id="qgBubble" aria-hidden="true">Здравствуйте!</span>
+    </div>
+  </section>
+
+  <section class="route" id="route" aria-labelledby="routeT">
+    <div class="rt-ring" aria-hidden="true"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="rt-bg"/><circle cx="60" cy="60" r="52" class="rt-fg" id="rtArc"/></svg><b id="rtPct">0%</b></div>
+    <div class="rt-main">
+      <span class="eyebrow">Личный маршрут</span>
+      <h2 id="routeT">Ваша экскурсия по музею</h2>
+      <p class="rt-txt" id="rtTxt"></p>
+      <div class="rt-eras" id="rtEras"></div>
+    </div>
+    <div class="rt-acts">
+      <button type="button" class="btn" id="rtGo">Начать экскурсию</button>
+      <button type="button" class="btn-o" id="rtGuide">Экскурсия с Нейрогидом</button>
+      <button type="button" class="btn link" id="rtReset" hidden>Начать заново</button>
+      <span class="rt-confirm" id="rtConfirm" hidden>Сбросить отметки о просмотре? <button type="button" class="btn-o" id="rtYes">Да, сбросить</button> <button type="button" class="btn link" id="rtNo">Нет</button></span>
     </div>
   </section>
 
@@ -621,6 +678,13 @@ dialog{border-radius:12px;background:#16161b}
     </button>
     <button class="g-x" id="gClose" type="button" aria-label="Закрыть Нейрогида">×</button>
   </header>
+  <div class="g-modes" id="gModes" role="group" aria-label="Режим экскурсии">
+    <button type="button" class="g-mode" data-mode="short">Короткая экскурсия</button>
+    <button type="button" class="g-mode" data-mode="full">Подробная экскурсия</button>
+    <button type="button" class="g-mode" data-mode="kid">Объясни школьнику</button>
+    <button type="button" class="g-mode" data-mode="ref">Историческая справка</button>
+    <button type="button" class="g-mode" data-mode="ask">Задай вопрос</button>
+  </div>
   <div class="g-log" id="gLog" aria-live="polite"></div>
   <form class="g-form" id="gForm" autocomplete="off">
     <label for="gInput" hidden>Ваш вопрос</label>
@@ -1586,12 +1650,21 @@ function emblem(a){
 const KEY="ussr-museum-seen";
 let seen=new Set();
 try{ seen=new Set(JSON.parse(localStorage.getItem(KEY)||"[]")); }catch(e){}
-function markSeen(id){ seen.add(id); try{localStorage.setItem(KEY,JSON.stringify([...seen]));}catch(e){} updateProgress(); }
+const LAST_KEY="museum-last";
+let lastId=null; try{ lastId=localStorage.getItem(LAST_KEY); }catch(e){}
+function markSeen(id){ seen.add(id); lastId=id; try{localStorage.setItem(KEY,JSON.stringify([...seen])); localStorage.setItem(LAST_KEY,id);}catch(e){} updateProgress(); }
+function resetSeen(){ seen=new Set(); lastId=null; try{localStorage.removeItem(KEY); localStorage.removeItem(LAST_KEY);}catch(e){} updateProgress(); }
+/* порядок маршрута: эпохи и залы по порядку экспозиции */
+let ROUTE=[];
+function routeOrder(){ if(!ROUTE.length) ROUTE=HALLS.flatMap(h=>AWARDS.filter(a=>a.hall===h.id)); return ROUTE; }
+function nextUnseen(fromId){ const R=routeOrder(); let i=fromId?R.findIndex(a=>a.id===fromId):-1;
+  for(let k=1;k<=R.length;k++){ const a=R[(i+k+R.length)%R.length]; if(!seen.has(a.id)) return a; } return null; }
 function updateProgress(){
   const n=AWARDS.filter(a=>seen.has(a.id)).length;
   document.getElementById("progTxt").textContent=`Осмотрено ${n} из ${AWARDS.length}`;
   document.getElementById("progBar").style.width=(n/AWARDS.length*100)+"%";
   document.querySelectorAll(".card").forEach(c=>{ const b=c.querySelector(".seen"); if(b) b.hidden=!seen.has(c.dataset.id); });
+  if(typeof renderRoute==="function") renderRoute();
 }
 
 /* ===== ВХОД ===== */
@@ -3351,6 +3424,39 @@ function sentenceWith(text,qs){
 function eraNote(e){ return e?` (${ERA_NAME[e]})`:""; }
 
 /* ---- ответы ---- */
+/* ===== Режимы: тексты собираются только из полей карточки экспоната, без новых сведений ===== */
+const MODES={short:"Короткая экскурсия",full:"Подробная экскурсия",kid:"Объясни школьнику",ref:"Историческая справка",ask:"Задай вопрос"};
+let MODE="ask"; try{ const m=localStorage.getItem("guide-mode"); if(MODES[m]) MODE=m; }catch(e){}
+const ERA_GEN={empire:"Российской империи",ussr:"Советского Союза",rf:"современной России"};
+const lc=t=>String(t||"").charAt(0).toLowerCase()+String(t||"").slice(1);
+const first=t=>{ const p=String(t||"").split(/(?<=[.!?])\s+/); return p[0]||""; };
+const dot=t=>/[.!?»)]$/.test(String(t).trim())?String(t).trim():String(t).trim()+".";
+function srcLine(a){ return `<p class="g-src">Источник: материалы экспозиции — карточка «${esc(a.name)}»</p>`; }
+function modeText(a,mode){
+  const era=eraOf(a), hall=HALLS.find(h=>h.id===a.hall);
+  if(mode==="full"){
+    const sec=(k,v)=>v&&v!=="—"?`<div class="g-sec"><b class="k">${k}</b>${esc(dot(v))}</div>`:"";
+    return `<b>${esc(a.name)}</b> — ${esc(lc(a.sub))}. ${ERA_NAME[era]}, зал «${esc(hall.name)}».`+
+      sec("Учреждена",a.est)+sec("За что вручали",a.statute)+sec("Как выглядит",a.look)+sec("Материал",a.material)+
+      sec("Награждений",a.count)+sec("Известные кавалеры",a.people)+sec("История",a.history)+sec("Интересный факт",a.fact);
+  }
+  if(mode==="kid"){
+    const age=new Date().getFullYear()-a.year;
+    let t=`Это <b>${esc(a.name)}</b> — награда ${ERA_GEN[era]}. Её учредили в ${a.year} году, то есть ${age} ${age%10===1&&age%100!==11?"год":(age%10>=2&&age%10<=4&&(age%100<12||age%100>14))?"года":"лет"} назад.`;
+    t+=`<div class="g-sec"><b class="k">Кому её давали</b>${esc(dot(a.statute))}</div>`;
+    if(a.look) t+=`<div class="g-sec"><b class="k">Как её узнать</b>${esc(dot(first(a.look)))}</div>`;
+    if(a.fact) t+=`<div class="g-sec"><b class="k">Запомни</b>${esc(dot(first(a.fact)))}</div>`;
+    if(a.inMuseum) t+=`<div class="g-sec"><b class="k">Посмотри сам</b>Модель этой награды есть в нашем школьном музее.</div>`;
+    return t;
+  }
+  if(mode==="ref"){
+    const row=(k,v)=>v&&v!=="—"?`<tr><th>${k}</th><td>${esc(v)}</td></tr>`:"";
+    return `<b>${esc(a.name)}</b><table class="g-ref">`+row("Эпоха",ERA_NAME[era])+row("Зал",hall.name)+row("Учреждена",a.est)+row("Статут",a.statute)+
+      row("Материал",a.material)+row("Награждений",a.count)+row("Кавалеры",a.people)+row("История",a.history)+`</table>`;
+  }
+  /* short и ask: около минуты чтения */
+  return `<b>${esc(a.name)}</b> — ${esc(lc(a.sub))}, ${ERA_NAME[era]}, ${a.year} год.<br>${esc(dot(a.statute))}<br><span class="g-fact">${esc(a.fact)}</span>`;
+}
 function answerAward(q,a,others){
   const pick=[
     [/за что|кому|зачем|чем заслуж|в каких случаях|статут/,"statute",x=>`<b>${esc(x.name)}</b> вручали так: ${esc(x.statute.charAt(0).toLowerCase()+x.statute.slice(1))}.`],
@@ -3365,12 +3471,12 @@ function answerAward(q,a,others){
   let body=null;
   for(const [re,,fn] of pick){ if(re.test(q)&&a){ body=fn(a); break; } }
   const summary=!body;
-  if(!body) body=`<b>${esc(a.name)}</b> — ${esc(a.sub.charAt(0).toLowerCase()+a.sub.slice(1))}, ${ERA_NAME[eraOf(a)]}, ${a.year} год.<br>${esc(a.statute)}.<br><span class="g-fact">${esc(a.fact)}</span>`;
+  if(!body) body=modeText(a,MODE);
   let out=body+chips([a]);
   if(a.audio) out+=`<button type="button" class="g-rec" data-audio="${a.audio}"${summary?" data-auto":""}><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>Рассказ экскурсовода</button>`;
   if(a.inMuseum) out+=`<p class="g-note">Модель этой награды есть в нашем музее, её фото в карточке.</p>`;
   if(others.length) out+=`<p class="g-note">Похожие экспонаты:</p>`+chips(others);
-  return out;
+  return out+srcLine(a);
 }
 function answerSuper(q,era,kind){
   let list=AWARDS.filter(a=>inEra(a,era)&&(!kind||(kind==="order"?/^орден/i:/^медаль/i).test(a.name)));
@@ -3491,7 +3597,7 @@ function setVoiceBtn(){ vBtn.setAttribute("aria-pressed",voiceOn); vBtn.title=vB
 if(!TTS) vBtn.hidden=true; else setVoiceBtn();
 vBtn.addEventListener("click",()=>{ voiceOn=!voiceOn; setVoiceBtn(); if(!voiceOn) stopSpeak(); try{localStorage.setItem("guide-voice",voiceOn?"on":"off");}catch(e){} });
 function speechText(el){
-  const c=el.cloneNode(true); c.querySelectorAll(".g-say,.g-rec,.g-sugg,.g-chip span").forEach(x=>x.remove());
+  const c=el.cloneNode(true); c.querySelectorAll(".g-say,.g-rec,.g-sugg,.g-chip span,.g-src,.g-nav,.g-step-h").forEach(x=>x.remove());
   const hasList=!!c.querySelector("li");
   c.querySelectorAll(".g-chips").forEach(x=>{ const n=[...x.querySelectorAll(".g-chip")].map(b=>b.textContent.trim()); x.replaceWith(!hasList&&n.length>1?" "+n.join(". ")+". ":" "); });
   c.querySelectorAll("li").forEach(li=>{ li.prepend(" "); li.append(". "); });
@@ -3557,13 +3663,50 @@ if(SR){ mic.hidden=false;
     try{ rec.start(); }catch(e){ clearTimeout(guard); micDone(); micStatus("Не удалось включить микрофон. Обновите страницу и попробуйте ещё раз."+KEYB); }
   });
 }
+/* ---- режимы и экскурсия по маршруту ---- */
+const modeBtns=[...document.querySelectorAll(".g-mode")];
+function paintModes(){ modeBtns.forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===MODE)); }
+paintModes();
+function tourOffer(){
+  const nx=nextUnseen(lastId), any=seen.size>0;
+  if(!nx) return `<div class="g-nav"><button type="button" data-start="first">Пройти музей ещё раз</button></div>`;
+  return `<div class="g-nav">${any?`<button type="button" class="pri" data-step="${nx.id}">Продолжить: ${esc(nx.name)} →</button>`:`<button type="button" class="pri" data-step="${nx.id}">Начать экскурсию →</button>`}${any?`<button type="button" data-start="first">С первого зала</button>`:""}</div>`;
+}
+const MODE_INTRO={
+  short:"<b>Короткая экскурсия.</b> Расскажу о каждом экспонате примерно за минуту. Если у экспоната есть запись экскурсовода, включу её.",
+  full:"<b>Подробная экскурсия.</b> Для каждого экспоната — всё, что есть в материалах музея: история, внешний вид, кавалеры, статут.",
+  kid:"<b>Объясни школьнику.</b> Расскажу коротко и просто: кому давали награду, как её узнать и что стоит запомнить.",
+  ref:"<b>Историческая справка.</b> Только даты и факты из карточек экспозиции: дата учреждения, статут, материал, число награждений.",
+  ask:"<b>Задай вопрос.</b> Спрашивайте о любой награде, годе или полководце. Я отвечаю только по материалам экспозиции, а если сведений нет — так и скажу."
+};
+function setMode(m,announce=true){
+  if(!MODES[m]) return; MODE=m; try{localStorage.setItem("guide-mode",m);}catch(e){} paintModes();
+  if(!announce) return;
+  stopSpeak();
+  const d=add(MODE_INTRO[m]+(m==="ask"?`<div class="g-sugg">${SUGGEST.map(s=>`<button type="button" class="g-s">${esc(s)}</button>`).join("")}</div>`:tourOffer()),"bot");
+  finishBot(d,false);
+}
+function step(id){
+  const a=byId[id]; if(!a) return;
+  stopSpeak(); markSeen(id);
+  const R=routeOrder(), pos=R.findIndex(x=>x.id===id)+1, nx=nextUnseen(id), hall=HALLS.find(h=>h.id===a.hall);
+  let html=`<span class="g-step-h">${MODES[MODE==="ask"?"short":MODE]} · экспонат ${pos} из ${R.length} · ${esc(hall.name)}</span>`+modeText(a,MODE==="ask"?"short":MODE);
+  if(a.audio&&(MODE==="short"||MODE==="ask")) html+=`<button type="button" class="g-rec" data-audio="${a.audio}" data-auto><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>Рассказ экскурсовода</button>`;
+  else if(a.audio) html+=`<button type="button" class="g-rec" data-audio="${a.audio}"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>Рассказ экскурсовода</button>`;
+  html+=srcLine(a);
+  html+=`<div class="g-nav">${nx?`<button type="button" class="pri" data-step="${nx.id}">Дальше: ${esc(nx.name)} →</button>`:""}<button type="button" data-open="${a.id}">Открыть карточку</button></div>`;
+  if(!nx) html+=`<p class="g-note">Это был последний неосмотренный экспонат — вы прошли весь музей! Проверьте себя в викторине.</p>`;
+  const d=add(html,"bot"); finishBot(d,true);
+}
+window.museumGuideTour=function(m){ open(); setMode(m||"short",false); const nx=nextUnseen(lastId); if(nx) step(nx.id); else setMode(MODE,true); };
+document.getElementById("gModes").addEventListener("click",e=>{ const b=e.target.closest(".g-mode"); if(b&&b.dataset.mode!==MODE) setMode(b.dataset.mode); else if(b) setMode(MODE); });
 const SUGGEST=["Какая награда самая старая?","За что давали орден Славы?","Что учредили в 1943 году?","Какие модели есть в музее?","Кто получил орден «Победа»?"];
 let started=false;
 function open(){
   G.panel.hidden=false; G.btn.setAttribute("aria-expanded","true"); G.btn.classList.add("on");
   if(!started){ started=true;
-    add(`<img class="g-hero" src="neurogid-full.jpg" alt="Нейрогид — робот-экскурсовод в пилотке">Здравствуйте! Я Нейрогид. Расскажу о любой из ${AWARDS.length} наград. Задайте вопрос или выберите один из этих:`+
-      `<div class="g-sugg">${SUGGEST.map(s=>`<button type="button" class="g-s">${esc(s)}</button>`).join("")}</div>`,"bot");
+    add(`<img class="g-hero" src="neurogid-full.jpg" alt="Нейрогид — робот-экскурсовод в пилотке">Здравствуйте! Я Нейрогид. Выберите режим вверху: короткая или подробная экскурсия, рассказ для школьника, историческая справка — или просто задайте вопрос. Я рассказываю только то, что есть в материалах экспозиции.`+
+      (MODE==="ask"?`<div class="g-sugg">${SUGGEST.map(s=>`<button type="button" class="g-s">${esc(s)}</button>`).join("")}</div>`:tourOffer()),"bot");
     finishBot(G.log.lastElementChild,false); }
   setTimeout(()=>G.input.focus(),50);
 }
@@ -3573,6 +3716,8 @@ document.getElementById("gClose").addEventListener("click",close);
 G.form.addEventListener("submit",e=>{ e.preventDefault(); const v=G.input.value; G.input.value=""; ask(v); });
 G.log.addEventListener("click",e=>{
   const s=e.target.closest(".g-s"); if(s){ ask(s.textContent); return; }
+  const st=e.target.closest("[data-step]"); if(st){ step(st.dataset.step); return; }
+  const sf=e.target.closest("[data-start]"); if(sf){ step(routeOrder()[0].id); return; }
   const say=e.target.closest(".g-say"); if(say){ if(say.classList.contains("playing")) stopSpeak(); else speak(say.closest(".g-msg")); return; }
   if(e.target.closest("[data-close]")) close();
 });
@@ -3584,6 +3729,28 @@ document.getElementById("navGuide").addEventListener("click",()=>document.getEle
 document.getElementById("heroGuide").addEventListener("click",()=>document.getElementById("guideBtn").click());
 document.getElementById("navSearch").addEventListener("click",()=>{ document.getElementById("halls").scrollIntoView({behavior:"smooth"}); setTimeout(()=>document.getElementById("q").focus({preventScroll:true}),400); });
 document.querySelectorAll(".ex[data-era]").forEach(b=>b.addEventListener("click",()=>{ setEra(b.dataset.era); document.getElementById("halls").scrollIntoView({behavior:"smooth"}); }));
+/* личный маршрут посетителя */
+function renderRoute(){
+  const R=routeOrder(), n=R.filter(a=>seen.has(a.id)).length, pct=Math.round(n/R.length*100);
+  const arc=document.getElementById("rtArc"); if(!arc) return;
+  arc.style.strokeDashoffset=String(326.7*(1-n/R.length));
+  document.getElementById("rtPct").textContent=pct+"%";
+  const last=lastId&&byId[lastId], next=nextUnseen(lastId);
+  const txt=document.getElementById("rtTxt"), go=document.getElementById("rtGo");
+  if(!n){ txt.innerHTML=`Сайт запомнит, какие экспонаты вы посмотрели, и предложит продолжить с того места, где вы остановились. Всего в музее <b>${R.length}</b> экспонатов.`; go.textContent="Начать экскурсию"; }
+  else if(!next){ txt.innerHTML=`Вы осмотрели <b>все ${R.length} экспонатов</b> музея. Отличная работа! Проверьте себя в викторине.`; go.textContent="Пройти викторину"; }
+  else { txt.innerHTML=`Осмотрено <b>${n} из ${R.length}</b>.${last?` Вы остановились на экспонате «${esc0(last.name)}».`:""} Следующий: <b>${esc0(next.name)}</b>.`; go.textContent="Продолжить экскурсию"; }
+  document.getElementById("rtEras").innerHTML=ERAS.map(e=>{ const L=R.filter(a=>eraOf(a)===e.id), k=L.filter(a=>seen.has(a.id)).length;
+    return `<div class="rt-era"><span>${e.name}<em style="font-style:normal">${k}/${L.length}</em></span><i><em style="width:${L.length?k/L.length*100:0}%"></em></i></div>`; }).join("");
+  document.getElementById("rtReset").hidden=!n||!document.getElementById("rtConfirm").hidden;
+}
+function esc0(t){ return String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+document.getElementById("rtGo").addEventListener("click",()=>{ const nx=nextUnseen(lastId); if(nx) openAward(nx.id); else document.getElementById("quiz").scrollIntoView({behavior:"smooth"}); });
+document.getElementById("rtGuide").addEventListener("click",()=>window.museumGuideTour&&window.museumGuideTour("short"));
+document.getElementById("rtReset").addEventListener("click",()=>{ document.getElementById("rtConfirm").hidden=false; document.getElementById("rtReset").hidden=true; });
+document.getElementById("rtNo").addEventListener("click",()=>{ document.getElementById("rtConfirm").hidden=true; renderRoute(); });
+document.getElementById("rtYes").addEventListener("click",()=>{ document.getElementById("rtConfirm").hidden=true; resetSeen(); });
+renderRoute();
 /* реплики Нейрогида в карточке на входе */
 (function(){ const b=document.getElementById("qgBubble"); if(!b) return;
   const L=["Здравствуйте!","Спросите меня о любой награде","За что давали орден Славы?","Какая награда самая старая?","Я могу говорить вслух","Нажмите «Начать экскурсию»"];
